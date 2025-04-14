@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Dashboard
+{% endblock %}
+
+{% block body %}
+	<div
+		class="admin-dashboard">
+		<aside class="sidebar">
+			<video autoplay muted loop class="background-video">
+				<source src="{{ asset('videos/light-side.mp4') }}" type="video/mp4"/>
+			</video>
+			<div class="search-bar">
+				<input type="text" id="searchInput" placeholder="Rechercher un utilisateur..."/>
+			</div>
+			<div
+				id="userResults" class="user-results">
+			</div>
+		</aside>
+
+		<main
+			class="main-content">
+			<header class="dashboard-header">
+				<div class="logo">
+					<a href="{{ path('app_homepage') }}">
+						<img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
+					</a>
+				</div>
+				<div class="welcome-section">
+					<h1>Welcome,
+						{{ user.firstName }}
+						{{ user.lastName }}</h1>
+				</div>
+				<div
+					class="admin-info">
+					<img
+					src="{{ asset('images/cat-profile.jpg') }}" alt="Admin Profile Picture" class="admin-photo" id="adminToggle">
+
+					<div class="hidden-nav">
+						<ul>
+							<li class="nav-item">
+								<a href="{{ path('app_logout') }}">
+									<img src="{{ asset('images/sign-out.svg') }}" alt="Sign Out" class="nav-icon">
+								</a>
+							</li>
+							<li class="nav-item">
+								<button class="stats-icon" data-target="add-user">
+									<img src="{{ asset('images/add-user.svg') }}" alt="Add client or admin" class="nav-icon"></button>
+							</li>
+							<li class="nav-item">
+								<div class="dark-mode-switch">
+									<img id="themeIcon" src="/images/sun.svg" alt="Theme Icon">
+								</div>
+							</li>
+						</ul>
+					</li>
+				</div>
+			</div>
+		</header>
+
+		<section
+			class="stats-section">
+			<nav class="stats-nav">
+				<button class="stats-icon" data-target="clients-details">
+					<img src="{{ asset('images/clients.svg') }}" alt="Clients Icon">
+				</button>
+				
+				<button class="stats-icon" data-target="stats-details">
+					<img src="{{ asset('images/stats.svg') }}" alt="Other Icon">
+				</button>
+			</nav>
+
+			<section class="details-container">
+    <div id="clients-details" class="details-content">
+        <h2>Détails des clients</h2>
+        <p>Nombre de clients : {{ totalClients }}</p>
+        
+        <p>
+            <a href="{{ path('admin_users_list') }}" class="text-blue-500 hover:text-blue-700">
+                Voir les comptes bancaires des clients
+            </a>
+        </p>
+    </div>
+</section>
+
+				
+
+				<div id="stats-details" class="details-content">
+					<h2>Stats des Comptes</h2>
+					<p>Nombre de Comptes :
+						{{ totalAccounts }}</p>
+				</div>
+
+				<div id="add-user" class="details-content">
+					<h2>Ajouter un utilisateur</h2>
+					<form method="post" action="{{ path('admin_add_user') }}" class="add-user-form">
+						<div>
+							<label for="firstName">Prénom</label>
+							<input type="text" id="firstName" name="firstName" required>
+						</div>
+						<div>
+							<label for="lastName">Nom</label>
+							<input type="text" id="lastName" name="lastName" required>
+						</div>
+						<div>
+							<label for="email">Email</label>
+							<input type="email" id="email" name="email" required>
+						</div>
+						<div>
+							<label for="phone">Téléphone</label>
+							<input type="text" id="phone" name="phone">
+						</div>
+						<div>
+							<label for="password">Mot de passe</label>
+							<input type="password" id="password" name="password" required>
+						</div>
+						<div>
+							<label for="roles">Rôle</label>
+							<select id="roles" name="roles" required>
+								<option value="ROLE_ADMIN">Admin</option>
+								<option value="ROLE_CUSTOMER">Client</option>
+							</select>
+						</div>
+						<button type="submit" class="btn-submit">Ajouter</button>
+					</form>
+				</div>
+
+			</section>
+		</section>
+	</main>
+</div>{% endblock %}

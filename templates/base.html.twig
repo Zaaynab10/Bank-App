@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+		{% block stylesheets %}
+			{% if app.request.attributes.get('_route') starts with 'home_admin' %}
+				<link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+			{% elseif app.request.attributes.get('_route') starts with 'admin_user_detail' %}
+				<link rel="stylesheet" href="{{ asset('css/user-details.css') }}">
+			{% elseif app.request.attributes.get('_route') starts with 'app_homepage' %}
+				<link rel="stylesheet" href="{{ asset('css/homepage.css') }}">
+			{% else  %}
+					<link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+			{% endif %}
+		{% endblock %}
+
+		{% block javascripts %}
+			<script src="{{ asset('js/dark-mode.js') }}" defer></script>
+			{% if app.request.attributes.get('_route') starts with 'app_' %}
+				<script src="{{ asset('js/button-animation.js') }}" defer></script>
+			{% elseif app.request.attributes.get('_route') starts with 'home_admin' %}
+				<script src="{{ asset('js/sidebar-toggle.js') }}" defer></script>
+				<script src="{{ asset('js/stats-nav.js') }}" defer></script>
+				<script src="{{ asset('js/search-bar.js') }}" defer></script>
+			{% elseif app.request.attributes.get('_route') starts with 'admin_user_detail' %}
+				<script src="{{ asset('js/sidebar-toggle.js') }}" defer></script>
+				<script src="{{ asset('js/user-detail.js') }}" defer></script>
+				<script src="{{ asset('js/detail-user-admin.js') }}"></script>
+			{% endif %}
+		{% endblock %}
+	</head>
+
+	<body>
+		{% block body %}
+			<div class="dark-mode-switch">
+				<img id="themeIcon" src="{{ asset('images/sun.svg') }}" alt="Theme Icon"/>
+			</div>
+		{% endblock %}
+	</body>
+</html>

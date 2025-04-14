@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Bank Account{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h2>Create a New Bank Account</h2>
+        
+        {{ form_start(form) }}
+        
+        <div class="mb-3">
+            {{ form_label(form.type, 'Account Type') }}
+            {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Account</button>
+        
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

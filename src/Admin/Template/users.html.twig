@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    {% block stylesheets %}
+        <style>
+            .user-card {
+                transition: transform 0.2s ease-in-out;
+            }
+            .user-card:hover {
+                transform: scale(1.05);
+            }
+            .view-accounts-btn {
+                background-color: #38a169;
+                color: white;
+            }
+            .view-accounts-btn:hover {
+                background-color: #2f855a;
+            }
+            .no-users {
+                text-align: center;
+                color: #777;
+                font-size: 16px;
+            }
+        </style>
+    {% endblock %}
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    {% block body %}
+    <div class="flex flex-col md:flex-row md:space-x-6 p-6">
+
+       
+
+        <main class="flex-1">
+            <header class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-semibold text-gray-800">Utilisateurs</h1>
+                <a href="{{ path('app_logout') }}" class="view-accounts-btn py-2 px-4 rounded-md bg-green-500 text-white font-semibold hover:bg-green-600 transition">
+                    Logout
+                </a>
+            </header>
+
+            <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {% for user in users %}
+                    <div class="user-card bg-white p-4 rounded-lg shadow-lg hover:scale-105 transition-transform">
+                        <div class="user-info flex items-center gap-4">
+                            <img src="{{ asset('images/user-icon.svg') }}" alt="User Icon" class="user-avatar w-16 h-16 rounded-full bg-gray-200 p-2">
+                            <div class="user-details">
+                                <h3 class="text-lg font-semibold text-gray-800">{{ user.firstName }} {{ user.lastName }}</h3>
+                                <p class="text-sm text-gray-600">{{ user.email }}</p>
+                            </div>
+                        </div>
+                        <a href="{{ path('admin_user_accounts', { id: user.id }) }}" class="view-accounts-btn mt-4 block text-center py-2 px-4 rounded-md bg-green-500 text-white font-semibold hover:bg-green-600 transition">
+                            Voir les comptes
+                        </a>
+                    </div>
+                {% else %}
+                    <p class="col-span-full text-center text-gray-600">Aucun utilisateur trouvé.</p>
+                {% endfor %}
+            </section>
+        </main>
+    </div>
+    {% endblock %}
+    
+</body>
+</html>

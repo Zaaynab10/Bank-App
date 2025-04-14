@@ -1,0 +1,29 @@
+home:
+    resource: '../src/Home/Controller/'
+    type: attribute
+
+accounts:
+    resource: '../src/Account/Controller/'
+    type: attribute
+    prefix: /accounts
+
+transactions:
+    resource: '../src/Transactions/Controller/'
+    type: attribute
+    prefix: /transactions
+
+auth:
+    resource: '../src/Auth/Controller/'
+    type: attribute
+    prefix: /auth
+
+admin:
+    resource: '../src/Admin/Controller/'
+    type: attribute
+    prefix: /admin
+
+
+admin_add_user:
+    path: /admin/add-user
+    controller: App\Controller\AdminDashController::addUser
+    methods: POST

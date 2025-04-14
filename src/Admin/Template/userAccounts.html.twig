@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Comptes de l'utilisateur{% endblock %}</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    {% block stylesheets %}
+        <style>
+            .status-active {
+                color: green;
+                font-weight: bold;
+            }
+            
+            .status-closed {
+                color: red;
+                font-weight: bold;
+            }
+
+            .toggle-status-btn {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+
+            .toggle-status-btn:hover {
+                background-color: #45a049;
+            }
+
+            .view-transactions-link {
+                background-color: #3498db;
+                color: white;
+                padding: 8px 15px;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: background-color 0.3s ease;
+            }
+
+            .view-transactions-link:hover {
+                background-color: #2980b9;
+            }
+        </style>
+    {% endblock %}
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+{% block body %}
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-semibold mb-6">Comptes bancaires de l'utilisateur : {{ user.firstName }} {{ user.lastName }}</h1>
+
+        <div class="account-container mb-8">
+            <h2 class="text-xl font-semibold text-gray-800">Comptes courants</h2>
+            <ul class="account-list mt-4 space-y-4">
+                {% for account in bankAccounts %}
+                    {% if account.type.value == 'current' %}
+                        <li class="account-item p-4 rounded-lg shadow-lg bg-white">
+                            <div class="account-info mb-4">
+                                <strong class="block font-semibold">Numéro de compte :</strong> {{ account.accountNumber }} <br>
+                                <strong class="block font-semibold">Solde :</strong> {{ account.balance | number_format(2, ',', ' ') }} € <br>
+                                <strong class="block font-semibold">Statut :</strong>
+                                {% if account.status.value == 'active' %}
+                                    <span class="status-active">Actif</span>
+                                {% else %}
+                                    <span class="status-closed">Fermé</span>
+                                {% endif %}
+                            </div>
+                            <a href="{{ path('admin_account_transactions', { id: user.id, accountId: account.id }) }}" class="view-transactions-link inline-block">Voir les transactions</a>
+                            
+                            <form action="{{ path('toggle_bank_account_status', { userId: user.id, accountId: account.id }) }}" method="POST" class="inline-block mt-4">
+                                <button type="submit" class="toggle-status-btn py-2 px-4 rounded-md {{ account.status.value == 'active' ? 'bg-red-500' : 'bg-green-500' }} text-white font-semibold hover:{{ account.status.value == 'active' ? 'bg-red-600' : 'bg-green-600' }} transition">
+                                    {% if account.status.value == 'active' %} Désactiver {% else %} Activer {% endif %}
+                                </button>
+                            </form>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="account-container">
+            <h2 class="text-xl font-semibold text-gray-800">Comptes d'épargne</h2>
+            <ul class="account-list mt-4 space-y-4">
+                {% for account in bankAccounts %}
+                    {% if account.type.value == 'savings' %}
+                        <li class="account-item p-4 rounded-lg shadow-lg bg-white">
+                            <div class="account-info mb-4">
+                                <strong class="block font-semibold">Numéro de compte :</strong> {{ account.accountNumber }} <br>
+                                <strong class="block font-semibold">Solde :</strong> {{ account.balance | number_format(2, ',', ' ') }} € <br>
+                                <strong class="block font-semibold">Statut :</strong>
+                                {% if account.status.value == 'active' %}
+                                    <span class="status-active">Actif</span>
+                                {% else %}
+                                    <span class="status-closed">Fermé</span>
+                                {% endif %}
+                            </div>
+                            <a href="{{ path('admin_account_transactions', { id: user.id, accountId: account.id }) }}" class="view-transactions-link inline-block">Voir les transactions</a>
+                            
+                            <form action="{{ path('toggle_bank_account_status', { userId: user.id, accountId: account.id }) }}" method="POST" class="inline-block mt-4">
+                                <button type="submit" class="toggle-status-btn py-2 px-4 rounded-md {{ account.status.value == 'active' ? 'bg-red-500' : 'bg-green-500' }} text-white font-semibold hover:{{ account.status.value == 'active' ? 'bg-red-600' : 'bg-green-600' }} transition">
+                                    {% if account.status.value == 'active' %} Désactiver {% else %} Activer {% endif %}
+                                </button>
+                            </form>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+</body>
+</html>

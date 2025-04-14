@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'utilisateur
+{% endblock %}
+
+{% block body %}
+	<div
+		class="user-detail-page">
+		<video autoplay loop muted playsinline class="background-video">
+			<source src="{{ asset('videos/light-background.mp4') }}" type="video/mp4">
+			Your browser does not support the video tag.
+		</video>
+
+		<nav>
+			<div class="logo">
+				<a href="{{ path('app_homepage') }}">
+					<img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
+				</a>
+			</div>
+			<div class="admin-info">
+				<img src="{{ asset('images/cat-profile.jpg') }}" alt="Admin Profile Picture" class="admin-photo" id="adminToggle">
+				<div class="hidden-nav">
+					<ul>
+						<li class="nav-item">
+							<a href="{{ path('app_logout') }}">
+								<img src="{{ asset('images/sign-out.svg') }}" alt="Sign Out" class="nav-icon">
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="/admin/dash">
+								<img src="{{ asset('images/house.svg') }}" alt="House" class="nav-icon"></a>
+						</li>
+						<li class="nav-item">
+							<div class="dark-mode-switch">
+								<img id="themeIcon" src="/images/sun.svg" alt="Theme Icon">
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<main>
+			<div
+				class="user-info-main">
+				<header class="user-header">
+					<img src="{{ asset('images/user.svg') }}" alt="Photo de profil" class="user-photo">
+					<div class="user-info">
+						<h1>{{ user.firstName }}
+							{{ user.lastName }}</h1>
+						<p>Email :
+							{{ user.email }}</p>
+						<p>Téléphone :
+							{{ user.phone }}</p>
+						<p>Status :
+							{{ user.isActive ? 'Actif' : 'Inactif' }}</p>
+						<p>Role :
+							{{ user.roles[0] }}
+						</p>
+					</div>
+				</header>
+
+				<div class="user-main">
+					<section class="user-accounts stats-box collapsible-header" data-type="accounts">
+						<h2>
+							<a href="{{ path('admin_user_accounts', { id: user.id }) }}">Comptes bancaires</a>
+						</h2>
+					</section>
+
+					<section class="user-transactions stats-box collapsible-header" data-type="transactions">
+						<h2>
+							<a href="{{ path('admin_account_transactions', { id: accountId }) }}">Transactions</a>
+						</h2>
+					</section>
+				</div>
+
+				<section class="user-footer">
+					<video autoplay loop muted playsinline class="footer-video">
+						<source src="{{ asset('videos/light-foot.mp4') }}" type="video/mp4">
+						Your browser does not support the video tag.
+					</video>
+					<div class="account-actions">
+						{% if user.isActive %}
+							<p>Ban
+								{{ user.firstName }}
+								{{ user.lastName }}?</p>
+							<button>
+								<a href="{{ path('admin_user_toggle', { id: user.id }) }}">
+									<img src="{{ asset('images/ban.svg') }}" alt="Bannir">
+								</a>
+							</button>
+						{% else %}
+							<p>Unban
+								{{ user.firstName }}
+								{{ user.lastName }}?</p>
+							<button>
+								<a href="{{ path('admin_user_toggle', { id: user.id }) }}">
+									<img src="{{ asset('images/unban.svg') }}" alt="Débannir">
+								</a>
+							</button>
+						{% endif %}
+					</div>
+				</section>
+			</div>
+		{% endblock %}

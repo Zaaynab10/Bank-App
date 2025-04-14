@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!
+{% endblock %}
+
+{% block body %}
+	<div
+		class="login-page">
+		<!-- Video Background -->
+		<video autoplay loop muted playsinline class="background-video">
+			<source src="{{ asset('videos/light-background.mp4') }}" type="video/mp4">
+			Your browser does not support the video tag.
+		</video>
+
+		<!-- Logo -->
+		<div class="logo">
+			<a href="{{ path('homepage') }}">
+				<img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
+			</a>
+		</div>
+
+		<!-- Dark Mode Switch -->
+		<div class="dark-mode-switch">
+			<img id="themeIcon" src="{{ asset('images/sun.svg') }}" alt="Theme Icon"/>
+		</div>
+
+		<!-- Title -->
+		<h1 class="welcome-title">Welcome Back</h1>
+
+		<!-- Login Form -->
+		<form method="post" action="{{ path('login') }}" class="login-form">
+			{% if error %}
+				<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+			{% endif %}
+
+			<div class="form-group">
+				<label for="inputEmail">Email</label>
+				<input type="text" name="_username" id="inputEmail" value="{{ last_username }}" required autofocus>
+			</div>
+
+			<div class="form-group">
+				<label for="inputPassword">Password</label>
+				<input type="password" name="_password" id="inputPassword" required>
+			</div>
+
+			<button class="btn btn-green" type="submit">
+				<img src="{{ asset('images/arrow-circle-right.svg') }}" alt="Right Arrow">
+			</button>
+		</form>
+
+
+		<!-- Footer Links -->
+		<div class="footer-links">
+			<a href="{{ path('register_admin') }}">Don't have an account yet? Register as Admin</a>
+			|
+			<a href="{{ path('register_customer') }}">Don't have an account yet? Register as Client</a>
+		</div>
+
+		<div class="footer-links">
+			<a href="#">Terms of Use</a>
+			|
+			<a href="#">Privacy Policy</a>
+		</div>
+	</div>
+{% endblock %}

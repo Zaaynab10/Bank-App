@@ -1,0 +1,91 @@
+
+{% block title %}Recherche des utilisateurs{% endblock %}
+
+{% block body %}
+    <h1>Recherche des utilisateurs</h1>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Rechercher un utilisateur..." />
+        <ul id="searchResults" class="search-results"></ul>
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .search-container {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .search-results {
+            list-style-type: none;
+            margin-top: 20px;
+            padding-left: 0;
+        }
+
+        .search-result-item {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function(event) {
+            const query = event.target.value;
+            const searchResultsContainer = document.getElementById('searchResults');
+            
+            if (query.length > 2) {
+                fetch(`/admin/search?q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        searchResultsContainer.innerHTML = '';
+                        if (data.length > 0) {
+                            data.forEach(user => {
+                                const li = document.createElement('li');
+                                li.classList.add('search-result-item');
+                                li.textContent = `${user.name} (${user.email})`;
+                                li.dataset.userId = user.id;
+                                li.addEventListener('click', function() {
+                                    window.location.href = `/admin/user/${user.id}`;
+                                });
+                                searchResultsContainer.appendChild(li);
+                            });
+                        } else {
+                            searchResultsContainer.innerHTML = '<li>Aucun utilisateur trouvé.</li>';
+                        }
+                    })
+                    .catch(error => {
+                        searchResultsContainer.innerHTML = '<li>Une erreur est survenue.</li>';
+                    });
+            } else {
+                searchResultsContainer.innerHTML = '';
+            }
+        });
+    </script>
+{% endblock %}

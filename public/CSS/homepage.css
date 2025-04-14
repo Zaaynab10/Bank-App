@@ -1,0 +1,209 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Général */
+body {
+    background: rgb(182, 182, 182);
+    background: linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
+    background-repeat: no-repeat;
+    color: #333333;
+}
+
+.homepage {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    text-align: center;
+}
+
+/* Vidéo de fond */
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0.6;
+}
+/* section{
+    background: rgb(182, 182, 182);
+    background: -moz-linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
+    background: linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b6b6b6", endColorstr="#cfd3f2", GradientType=1);
+    background-repeat: no-repeat; */
+/* } */
+/* Section de bienvenue */
+.welcome-section {
+    padding: 100px 20px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+    margin: 50px auto;
+    max-width: 800px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-section h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.welcome-section p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #666666;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.cta-buttons .btn {
+    background-color: rgba(206, 210, 241, 1);
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.cta-buttons .btn:hover {
+    background-color: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+.cta-buttons .btn-alt {
+    background-color: #ffffff;
+    color: rgba(206, 210, 241, 1);
+    border: 2px solid rgba(206, 210, 241, 1);
+}
+
+.cta-buttons .btn-alt:hover {
+    background-color: rgba(206, 210, 241, 1);
+    color: #ffffff;
+}
+
+/* Section des services */
+.features-section {
+    padding: 50px 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+}
+
+.features-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.feature {
+    text-align: center;
+    max-width: 300px;
+    background: rgb(182, 182, 182);
+    background: -moz-linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
+    background: linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b6b6b6", endColorstr="#cfd3f2", GradientType=1);
+    background-repeat: no-repeat;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feature img {
+    width: 80px;
+    margin-bottom: 20px;
+}
+
+.feature h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.feature p {
+    font-size: 1rem;
+    color: #666666;
+}
+
+/* Section des témoignages */
+.testimonials-section {
+    padding: 50px 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+}
+
+.testimonials-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.testimonials {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.testimonial {
+    background-color: rgba(217, 217, 217, 1);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    font-style: italic;
+    color: #2c3e50;
+    text-align: left;
+    position: relative;
+}
+
+.testimonial::before {
+    content: "“";
+    font-size: 3rem;
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    color: #666666;
+}
+
+.testimonial::after {
+    content: "”";
+    font-size: 3rem;
+    position: absolute;
+    bottom: -10px;
+    right: 10px;
+    color: #666666;
+}
+
+.testimonial span {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: right;
+    color: #2c3e50;
+}

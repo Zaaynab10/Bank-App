@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Détails des Transactions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+    {% block body %}
+    <div class="container mx-auto px-6 py-12">
+        <h1 class="text-4xl font-semibold text-center text-gray-900 mb-8">Détails des Transactions pour le Compte {{ accountId }}</h1>
+
+        <div class="transaction-container bg-gray-50 p-6 rounded-lg">
+            {% if transactions is not empty %}
+                <ul class="space-y-4">
+                    {% for transaction in transactions %}
+                        <li class="transaction-item bg-white p-4 rounded-lg shadow-md">
+                            <div class="transaction-info">
+                                <p class="text-lg font-medium text-gray-800">Montant: {{ transaction.amount | number_format(2, ',', ' ') }} €</p>
+                                <p class="text-sm text-gray-500">Type: {{ transaction.type.value }}</p>
+                                <p class="text-sm text-gray-500">Statut: 
+                                    {% if transaction.status.value == 'successed' %}
+                                        <span class="text-green-600 font-semibold">Successed</span>
+                                    {% else %}
+                                        <span class="text-red-600 font-semibold">Failed</span>
+                                    {% endif %}
+                                </p>
+                                <p class="text-sm text-gray-500">Source: {{ transaction.sourceAccount.accountNumber }}</p>
+                                <p class="text-sm text-gray-500">Destination: {{ transaction.destinationAccount.accountNumber }}</p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Aucune transaction trouvée pour ce compte.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endblock %}
+
+</body>
+</html>

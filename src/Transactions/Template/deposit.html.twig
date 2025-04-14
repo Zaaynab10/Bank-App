@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}
+
+{% block title %}Dépôt de fonds{% endblock %}
+
+{% block body %}
+    <div class="max-w-lg mx-auto bg-white p-8 mt-10 rounded-lg shadow-md">
+        <h1 class="text-2xl font-semibold text-center text-gray-700 mb-6">Déposer des fonds</h1>
+
+        <form method="post" class="space-y-6">
+            {{ form_start(form) }}
+
+            <div>
+                {{ form_label(form.account, null, { 'label_attr': { 'class': 'block text-gray-600 font-medium mb-2' } }) }}
+                {{ form_widget(form.account, { 'attr': { 'class': 'w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.amount, null, { 'label_attr': { 'class': 'block text-gray-600 font-medium mb-2' } }) }}
+                {{ form_widget(form.amount, { 'attr': { 'class': 'w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none' } }) }}
+            </div>
+
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-md transition">
+                Déposer
+            </button>
+
+            {{ form_end(form) }}
+ 
+  </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+twig:
+    default_path: '%kernel.project_dir%/templates'
+    paths:
+        '%kernel.project_dir%/src/Account/Template': Account
+        '%kernel.project_dir%/src/Admin/Template': Admin
+        '%kernel.project_dir%/src/Auth/Template': Auth
+        '%kernel.project_dir%/src/Home/Template': Home
+        '%kernel.project_dir%/src/Transactions/Template': Transactions
+
+when@test:
+    twig:
+        strict_variables: true

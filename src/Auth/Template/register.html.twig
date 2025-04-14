@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sign Up
+{% endblock %}
+
+{% block body %}
+	<div
+		class="register-page">
+		<!-- Video Background -->
+		<video autoplay loop muted playsinline class="background-video">
+			<source src="{{ asset('videos/light-background.mp4') }}" type="video/mp4">
+			Your browser does not support the video tag.
+		</video>
+
+		<!-- Logo -->
+		<div class="logo">
+			<a href="{{ path('homepage') }}">
+				<img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
+			</a>
+		</div>
+
+		<!-- Dark Mode Switch -->
+		<div class="dark-mode-switch">
+			<img id="themeIcon" src="{{ asset('images/sun.svg') }}" alt="Theme Icon"/>
+		</div>
+
+		<!-- Title -->
+		<h1 class="welcome-title">Welcome, Create Your Account</h1>
+
+		<!-- Registration Form -->
+		{{ form_start(registrationForm, { 'attr': { 'class': 'register-form' }, 'method': 'post' }) }}
+		{{ form_row(registrationForm.firstName, { 'label': 'First Name' }) }}
+		{{ form_row(registrationForm.lastName, { 'label': 'Last Name' }) }}
+		{{ form_row(registrationForm.email, { 'label': 'Email' }) }}
+		{{ form_row(registrationForm.plainPassword, { 'label': 'Password' }) }}
+		{{ form_row(registrationForm.phone, { 'label': 'Phone Number' }) }}
+
+		<button class="btn btn-green" type="submit">
+			<img src="{{ asset('images/arrow-circle-right.svg') }}" alt="Right Arrow">
+		</button>
+		{{ form_end(registrationForm) }}
+
+		<!-- Footer Links -->
+		<div class="footer-links">
+			<a href="{{ path('login') }}">Already have an account? Log in</a>
+		</div>
+		<div class="footer-links">
+			<a href="#">Terms of Use</a>
+			|
+			<a href="#">Privacy Policy</a>
+		</div>
+	</div>
+{% endblock %}
