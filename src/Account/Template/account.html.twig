@@ -1,73 +1,50 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Transactions{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
+{% extends 'base-client.html.twig' %}
 
-    {% block body %}
-        <!-- Barre de navigation -->
-        <header class="bg-green-700 text-white p-4 shadow-md">
-            <div class="container mx-auto flex justify-between items-center">
-                <a href="{{ path('accounts') }}" class="text-lg font-semibold">Mes Comptes</a>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ path('logout') }}" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">Déconnexion</a>
-                    <img src="{{ asset('images/profile-placeholder.png') }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-white">
-                </div>
-            </div>
-        </header>
+{% block title %}Transactions{% endblock %}
 
-        <!-- Contenu principal -->
-        <div class="container mx-auto mt-10 p-4">
-            <!-- Onglets (Withdraw, Deposit, Transfer) -->
-            <div class="flex justify-center space-x-4 mb-6">
-                <a href="{{ path('withdraw') }}" class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition">Retrait</a>
-                <a href="{{ path('deposit') }}" class="bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-md transition">Dépôt</a>
-                <a href="{{ path('transfer') }}" class="bg-yellow-500 hover:bg-yellow-700 text-white px-6 py-2 rounded-md transition">Virement</a>
-            </div>
+{% block main %}
+  <!-- Onglets (Withdraw, Deposit, Transfer) -->
+  <div class="flex justify-center space-x-4">
+    <a href="{{ path('withdraw') }}"
+       class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition">Retrait</a>
+    <a href="{{ path('deposit') }}"
+       class="bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-md transition">Dépôt</a>
+    <a href="{{ path('transfer') }}"
+       class="bg-yellow-500 hover:bg-yellow-700 text-white px-6 py-2 rounded-md transition">Virement</a>
+  </div>
 
-            <!-- Liste des transactions -->
-            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Historique des Transactions</h3>
+  <!-- Liste des transactions -->
+  <h3 class="text-2xl font-semibold text-gray-800">Historique des Transactions</h3>
 
-            <div class="bg-white shadow-md rounded-lg p-6">
-                <ul class="divide-y divide-gray-200">
-                    {% for transaction in transactions %}
-                        <li class="py-4 flex justify-between items-center">
-                            <div>
-                                <span class="text-gray-500">{{ transaction.dateTime|date('d/m/Y H:i') }}</span>
-                                <span class="font-semibold ml-2">{{ transaction.type.value }}</span>
-                            </div>
-                            <div class="text-lg font-bold {% if transaction.amount < 0 %}text-red-500{% else %}text-green-500{% endif %}">
-                                {{ transaction.amount|number_format(2, ',', ' ') }} €
-                            </div>
-                            <span class="px-3 py-1 rounded-md text-white text-sm {% if transaction.status.value == 'validée' %}bg-green-500{% else %}bg-gray-500{% endif %}">
+  <div class="bg-white shadow-md rounded-lg p-6">
+    <ul class="divide-y divide-gray-200">
+      {% for transaction in transactions %}
+        <li class="py-4 flex justify-between items-center">
+          <div>
+            <span class="text-gray-500">{{ transaction.dateTime|date('d/m/Y H:i') }}</span>
+            <span class="font-semibold ml-2">{{ transaction.type.value }}</span>
+          </div>
+          <div
+              class="text-lg font-bold {% if transaction.amount < 0 %}text-red-500{% else %}text-green-500{% endif %}">
+            {{ transaction.amount|number_format(2, ',', ' ') }} €
+          </div>
+          <span
+              class="px-3 py-1 rounded-md text-white text-sm {% if transaction.status.value == 'validée' %}bg-green-500{% else %}bg-gray-500{% endif %}">
                                 {{ transaction.status.value }}
                             </span>
-                        </li>
-                    {% else %}
-                        <li class="text-center text-gray-500 py-6">Aucune transaction trouvée.</li>
-                    {% endfor %}
-                </ul>
-            </div>
+        </li>
+      {% else %}
+        <li class="text-center text-gray-500 py-6">Aucune transaction trouvée.</li>
+      {% endfor %}
+    </ul>
+  </div>
 
-            <!-- Pagination -->
-            <div class="flex justify-between items-center mt-6">
-                <button class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md transition" id="prev-page">Précédent</button>
-                <span id="page-info" class="text-gray-700">Page 1</span>
-                <button class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md transition" id="next-page">Suivant</button>
-            </div>
-        </div>
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-6">
+    <button class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md transition" id="prev-page">Précédent
+    </button>
+    <span id="page-info" class="text-gray-700">Page 1</span>
+    <button class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md transition" id="next-page">Suivant</button>
+  </div>
 
-    {% endblock %}
-
-
-
-<div>
-
-
-</div>
-</body>
-</html>
+{% endblock %}

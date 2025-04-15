@@ -1,48 +1,41 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mes Comptes{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
+{% extends 'base-client.html.twig' %}
 
-    {% block body %}
-        <header class="bg-green-700 text-white p-4 shadow-md">
-            <div class="container mx-auto flex justify-between items-center">
-                <h1 class="text-2xl font-bold">Banque en ligne</h1>
-                <div class="flex items-center space-x-4">
-                    <a href="{{ path('logout') }}" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">Déconnexion</a>
-                    <img src="{{ asset('images/profile-placeholder.png') }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-white">
-                </div>
-            </div>
-        </header>
+{% block title %}Mes Comptes{% endblock %}
 
-        <div class="container mx-auto mt-10 p-4">
-            <h2 class="text-3xl font-semibold text-gray-800 mb-6">Mes Comptes</h2>
+{% block main %}
+  <h2 class="text-3xl font-semibold text-gray-800">Mes Comptes</h2>
+  <a href="{{ path('create_account') }}"
+     class="inline-block bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-md transition center text-center">
+    Créer un compte
+  </a>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {% for account in accounts %}
-                    <div class="bg-white shadow-lg rounded-lg p-6 border-l-4 {{ account.status.value == 'active' ? 'border-green-500' : 'border-red-500' }}">
-                        <h3 class="text-lg font-bold text-gray-700">Compte {{ account.accountNumber }}</h3>
-                        <p class="text-gray-500">Type : <span class="font-semibold">{{ account.type.value }}</span></p>
-                        <p class="text-gray-500">Solde : <span class="font-semibold">{{ account.balance|number_format(2, ',', ' ') }} €</span></p>
-                        <p class="mt-2">
-                            État : 
-                            <span class="px-2 py-1 rounded-md text-white text-sm {{ account.status.value == 'active' ? 'bg-green-500' : 'bg-red-500' }}">
-                                {{ account.status.value | capitalize }}
-                            </span>
-                        </p>
-                        <a href="{{ path('account', { accountId: account.id }) }}" class="mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">Voir les transactions</a>
-                    </div>
-                {% else %}
-                    <p class="text-gray-600 col-span-full text-center">Aucun compte disponible.</p>
-                {% endfor %}
-            </div>
-        </div>
-
-    {% endblock %}
-
-</body>
-</html>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for account in accounts %}
+      <div
+          class="bg-white shadow-lg rounded-lg p-6 border-l-4 {{ account.status.value == 'active' ? 'border-green-500' : 'border-red-500' }}">
+        <h3 class="text-lg font-bold text-gray-700">Compte {{ account.accountNumber }}</h3>
+        <p class="text-gray-500">Type :
+          <span class="font-semibold">{{ account.type.value }}
+            </span>
+        </p>
+        <p class="text-gray-500">Solde :
+          <span class="font-semibold">{{ account.balance|number_format(2, ',', ' ') }} €
+            </span>
+        </p>
+        <p class="mt-2">
+          État :
+          <span
+              class="px-2 py-1 rounded-md text-white text-sm {{ account.status.value == 'active' ? 'bg-green-500' : 'bg-red-500' }}">
+              {{ account.status.value | capitalize }}
+            </span>
+        </p>
+        <a href="{{ path('account', { accountId: account.id }) }}"
+           class="mt-4 inline-block bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition">
+          Voir les transactions
+        </a>
+      </div>
+    {% else %}
+      <p class="text-gray-600 col-span-full text-center">Aucun compte disponible.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

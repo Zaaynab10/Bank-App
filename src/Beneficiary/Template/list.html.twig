@@ -1,30 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Liste des bénéficiaires</title>
-</head>
-<body>
-    <h1>Mes bénéficiaires</h1>
+{% extends 'base-client.html.twig' %}
 
-    {% if beneficiaries is empty %}
-        <p>Aucun bénéficiaire trouvé.</p>
-    {% else %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Numéro de compte</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for beneficiary in beneficiaries %}
-                    <tr>
-                        <td>{{ beneficiary.name }}</td>
-                        <td>{{ beneficiary.bankAccountNumber }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
-</body>
-</html>
+{% block title %}Liste des bénéficiaires{% endblock %}
+
+{% block main %}
+  <h1>Mes bénéficiaires</h1>
+  <a href="{{ path('add_beneficiary') }}"
+     class="inline-block bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-md transition center text-center">
+    Ajouter un bénéficiaire
+  </a>
+  {% if beneficiaries is empty %}
+    <p>Aucun bénéficiaire trouvé.</p>
+  {% else %}
+    <table>
+      <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Numéro de compte</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for beneficiary in beneficiaries %}
+        <tr>
+          <td>{{ beneficiary.name }}</td>
+          <td>{{ beneficiary.bankAccountNumber }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}

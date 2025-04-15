@@ -61,7 +61,9 @@ final class DepositController extends AbstractController {
 
         $transactionService->processTransaction($amount, $bankAccount, $bankAccount, TransactionType::DEPOSIT);
 
-        return $this->redirectToRoute('accounts');
+        return $this->redirectToRoute('account', [
+            'accountId' => $bankAccount->getId(),
+        ]);
     }
     return $this->render('@Transactions/deposit.html.twig', [
         'form' => $form->createView(),

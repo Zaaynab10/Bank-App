@@ -64,7 +64,8 @@ final class WithdrawController extends AbstractController {
 
         return $this->redirectToRoute('account', [
             'accountId' => $bankAccountId,
-        ]);    }
+        ]);
+    }
     return $this->render('@Transactions/withdraw.html.twig', [
         'form' => $form->createView(),
     ]);

@@ -79,10 +79,9 @@ final class TransferController extends AbstractController
 
             $transactionService->processTransaction($amount, $sourceAccount, $destinationAccount, TransactionType::TRANSFER);
 
-          
-
-            
-            return $this->redirectToRoute('accounts');
+            return $this->redirectToRoute('account', [
+                'accountId' => $sourceAccount->getId(),
+            ]);
         }
 
         return $this->render('@Transactions/transfer.html.twig', [
