@@ -43,10 +43,7 @@
 									<img src="{{ asset('images/sign-out.svg') }}" alt="Sign Out" class="nav-icon">
 								</a>
 							</li>
-							<li class="nav-item">
-								<button class="stats-icon" data-target="add-user">
-									<img src="{{ asset('images/add-user.svg') }}" alt="Add client or admin" class="nav-icon"></button>
-							</li>
+							
 							<li class="nav-item">
 								<div class="dark-mode-switch">
 									<img id="themeIcon" src="/images/sun.svg" alt="Theme Icon">
@@ -65,11 +62,7 @@
 					<img src="{{ asset('images/clients.svg') }}" alt="Clients Icon">
 				</button>
 				
-				<button class="stats-icon" data-target="stats-details">
-					<img src="{{ asset('images/stats.svg') }}" alt="Other Icon">
-				</button>
-			</nav>
-
+			
 			<section class="details-container">
     <div id="clients-details" class="details-content">
         <h2>Détails des clients</h2>
@@ -85,45 +78,7 @@
 
 				
 
-				<div id="stats-details" class="details-content">
-					<h2>Stats des Comptes</h2>
-					<p>Nombre de Comptes :
-						{{ totalAccounts }}</p>
-				</div>
 
-				<div id="add-user" class="details-content">
-					<h2>Ajouter un utilisateur</h2>
-					<form method="post" action="{{ path('admin_add_user') }}" class="add-user-form">
-						<div>
-							<label for="firstName">Prénom</label>
-							<input type="text" id="firstName" name="firstName" required>
-						</div>
-						<div>
-							<label for="lastName">Nom</label>
-							<input type="text" id="lastName" name="lastName" required>
-						</div>
-						<div>
-							<label for="email">Email</label>
-							<input type="email" id="email" name="email" required>
-						</div>
-						<div>
-							<label for="phone">Téléphone</label>
-							<input type="text" id="phone" name="phone">
-						</div>
-						<div>
-							<label for="password">Mot de passe</label>
-							<input type="password" id="password" name="password" required>
-						</div>
-						<div>
-							<label for="roles">Rôle</label>
-							<select id="roles" name="roles" required>
-								<option value="ROLE_ADMIN">Admin</option>
-								<option value="ROLE_CUSTOMER">Client</option>
-							</select>
-						</div>
-						<button type="submit" class="btn-submit">Ajouter</button>
-					</form>
-				</div>
 
 			</section>
 		</section>
