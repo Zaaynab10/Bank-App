@@ -5,44 +5,51 @@
 		{% endblock %}
 	</title>
 	<style>
-		body {
+		* {
 			font-family: Arial, sans-serif;
 			margin: 0;
 			padding: 0;
-			background-color: #f4f4f4;
+			text-decoration: none;
+			scroll-behavior: smooth;
 		}
-		/*
-		.homepage {
-			position: relative;
-			min-height: 100vh;
-			background-color: #fff;
-			overflow: hidden;
+
+		.intro-section,
+		.features-section,
+		.accompany-section,
+		.testimonials-section {
+			h2 {
+				font-size: 32px;
+				text-align: left;
+			}
+
+			span:not(.testimonial span) {
+				text-decoration: underline;
+				text-underline-offset: 4px;
+			}
 		}
-		
-		.background-video {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			z-index: -1;
-		} */
 
 		.welcome-section {
-			text-align: center;
-			padding: 10px 20px;
+			display: flex;
+			flex-flow: row wrap;
+			justify-content: space-between;
+			align-items: center;
 			color: white;
-			background-color: rgba(6, 131, 26, 0.5);
+			background-color: #1F5E00;
+
+			a {
+				color: white;
+			}
 		}
 
-		.cta-buttons {
-			margin-top: 5px;
+		.website-logo {
+			margin-left: 1.5vw;
 		}
 
-		.cta-buttons .btn {
+		.cta-buttons .btn,
+		.intro-description .btn,
+		.accompany-description .btn {
 			display: inline-block;
-			background-color:rgba(111, 245, 140, 0.5) ;
+			background-color: #1F5E00;
 			color: white;
 			padding: 10px 20px;
 			border-radius: 5px;
@@ -51,72 +58,145 @@
 			transition: background-color 0.3s ease;
 		}
 
-		.cta-buttons .btn:hover {
-			background-color:rgb(12, 199, 105);
+		.cta-buttons .btn:hover,
+		.intro-description .btn:hover,
+		.accompany-description .btn:hover {
+			background-color: rgb(109, 199, 64);
 			scale: 105%;
 		}
-.features {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 30px;
-}
 
-.feature-card {
-    width: calc(25% - 30px);
-    perspective: 1000px;
-}
+		.intro-section {
+			width: 95%;
+			margin: auto;
+			padding: 4vw 0;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
 
-.card-inner {
-    position: relative;
-    width: 80%;
-    padding-top: 100%; /* carré */
-    transform-style: preserve-3d;
-    transition: transform 0.8s;
-}
+			.btn {
+				margin-left: 0;
+			}
 
-.feature-card:hover .card-inner {
-    transform: rotateY(180deg);
-}
+			h2 {
+				margin-bottom: 2vw;
+			}
 
-.card-front, .card-back {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 90%;
-    height: 90%;
-    border-radius: 10px;
-    backface-visibility: hidden; /*
+			p {
+				margin-bottom: 1vw;
+			}
+		}
+
+		.intro-description {
+			width: 50%;
+		}
+
+		.intro-lorem p {
+			font-size: 16px;
+		}
+
+		.features {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			gap: 30px;
+		}
+
+		.feature-card {
+			width: calc(25% - 30px);
+			perspective: 1000px;
+		}
+
+		.card-inner {
+			position: relative;
+			width: 80%;
+			padding-top: 100%; /* carré */
+			transform-style: preserve-3d;
+			transition: transform 0.8s;
+		}
+
+		.feature-card:hover .card-inner {
+			transform: rotateY(180deg);
+		}
+
+		.card-front,
+		.card-back {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 90%;
+			height: 90%;
+			border-radius: 10px;
+			backface-visibility: hidden; /*
     background: linear-gradient(180deg, #b6b6b6 0%, #cfd3f2 100%); */
-	background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    box-shadow: 1px 6px 8px rgba(0, 0, 0, 0.1);
-}
+			background-color: #ffffff;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			padding: 30px;
+			box-shadow: 1px 6px 8px rgba(0, 0, 0, 0.1);
+		}
 
-.card-front img {
-    width: 60px;
-    margin-bottom: 15px;
-}
+		.card-front img {
+			width: 60px;
+			margin-bottom: 15px;
+		}
 
-.card-front h3 {
-    font-size: 1.2rem; 
-    color: #2c3e50;
-}
+		.card-front h3 {
+			font-size: 1.2rem;
+			color: #2c3e50;
+		}
 
-.card-back {
-    transform: rotateY(180deg);
-    font-size: 1rem;
-    color: #333;
-    background-color: #ffffff;
-}
+		.card-back {
+			transform: rotateY(180deg);
+			font-size: 1rem;
+			color: #333;
+			background-color: #ffffff;
+		}
+
+		.accompany-section {
+			width: 95%;
+			margin: 8vw auto;
+
+			h2 {
+				text-align: center;
+				width: 80%;
+				margin: 0 auto 4vw;
+			}
+
+			.btn {
+				margin-left: 0;
+			}
+		}
+
+		.accompany-content {
+			display: flex;
+			flex-flow: row wrap;
+			justify-content: space-between;
+		}
+
+		.accompany-description {
+			width: 50%;
+
+			strong p {
+				padding-bottom: 2.5vw;
+			}
+
+			p {
+				padding-bottom: 1vw;
+			}
+		}
+
 		.testimonials-section {
 			background-color: #f1f1f1;
 			padding: 50px 20px;
 			text-align: center;
+
+			h2 {
+				text-align: center;
+				width: 80%;
+				margin: 0 auto 4vw;
+			}
 		}
 
 		.testimonials {
@@ -142,96 +222,139 @@
 		.testimonial span {
 			font-weight: bold;
 		}
+
+		.website-footer {
+			padding: 1vw 0;
+			text-align: center;
+			background-color: #1F5E00;
+			color: white;
+		}
 	</style>
 </head>
 
 {% block body %}
-		<div class="homepage">
-	<!--
-		<video autoplay loop muted playsinline class="background-video">
-			<source src="{{ asset('videos/light-background.mp4') }}" type="video/mp4">
-			Your browser does not support the video tag.
-		</video> -->
+	<div
+		class="homepage">
+		<!--
+												<video autoplay loop muted playsinline class="background-video">
+													<source src="{{ asset('videos/light-background.mp4') }}" type="video/mp4">
+													Your browser does not support the video tag.
+												</video> -->
 
-		<header class="welcome-section mb-60">
-			<div>
-			</div>
+		<header class="welcome-section">
+			<a href="" class="website-logo">
+				<img src="" alt="">
+				<h1>Logo.</h1>
+			</a>
+			<!--<h1>Bienvenue sur votre banque en ligne</h1>
+									<p>Gérez vos finances en toute simplicité, rapidité et sécurité.</p>-->
 			<div class="cta-buttons">
-				<a href="{{ path('login') }}" class="btn shadow-md">Se connecter</a>
-				<a href="{{ path('register_customer') }}" class="btn btn-alt shadow-md">Devenir Client</a>
-				<a href="{{ path('register_admin') }}" class="btn btn-alt shadow-md">Créer un compte Admin</a>
+				<a href="{{ path('login') }}" class="btn">Se connecter</a>
+				<a href="{{ path('register_customer') }}" class="btn btn-alt">Devenir client</a>
+				<a href="{{ path('register_admin') }}" class="btn btn-alt">Devenir admin</a>
 			</div>
 		</header>
 
-		<section>
-			<div class="text-left w-full md:w-1/2 flex flex-col items-start justify-center">
-				<h1>Les efforts finissent toujours par payer</h1>
-				<p>Lorem fjfnrefeofefef referf</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		<section class="intro-section">
+			<article class="intro-description">
+				<h2>Les efforts finissent toujours par
+					<span>payer</span>
+				</h2>
+				<div class="intro-lorem">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla fugit earum dolores soluta itaque iste vel minus suscipit consequuntur optio fuga amet unde ab, perferendis et nam consequatur assumenda. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit quo totam vel consequatur sint quis? Ratione, quaerat sapiente voluptatum obcaecati vitae animi, magni magnam quod iusto corrupti nobis omnis? Vitae! Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+				</div>
+				<a href="{{ path('register_customer') }}" class="btn btn-alt">Devenir client dès maintenant</a>
+			</article>
+			<article class="intro-img">
+				<img src="online-shopping-6203699_640" alt="Online shopping woman">
+			</article>
+		</section>
 
-				<a href="{{ path('register_customer') }}" class="btn btn-alt">Devenir Client dès maintenant</a>
+		<section class="features-section bg-green-300 mt-10">
+			<div class="flex justify-center">
+				<h2 class="text-4xl font-semibold mt-20 mb-20">Pourquoi Choisir notre Banque ?</h2>
 			</div>
-			<div class="w-full md:w-1/2 flex justify-center md:justify-end">
-				<img src="{{ asset('images/.svg') }}" alt="imageaccueil">
+			<div class="features">
+				<div class="feature-card ml-7">
+					<div class="card-inner">
+						<div class="card-front shadow-lg">
+							<img src="{{ asset('images/transfer.svg') }}" alt="Virements" class="h-16 w-16">
+							<h3>Virements rapides</h3>
+						</div>
+						<div class="card-back">
+							<p>Envoyez et recevez de l'argent instantanément.</p>
+						</div>
+					</div>
+				</div>
+				<div class="feature-card">
+					<div class="card-inner">
+						<div class="card-front">
+							<img src="{{ asset('images/savings.svg') }}" alt="Épargne" class="h-16 w-16">
+							<h3>Comptes épargne</h3>
+						</div>
+						<div class="card-back">
+							<p>Boostez vos économies avec nos taux compétitifs.</p>
+						</div>
+					</div>
+				</div>
+				<div class="feature-card">
+					<div class="card-inner">
+						<div class="card-front">
+							<img src="{{ asset('images/support.svg') }}" alt="Support" class="h-16 w-16">
+							<h3>Assistance 24/7</h3>
+						</div>
+						<div class="card-back">
+							<p>Notre équipe est disponible pour vous aider à tout moment.</p>
+						</div>
+					</div>
+				</div>
+				<div class="feature-card mb-40">
+					<div class="card-inner">
+						<div class="card-front">
+							<img src="{{ asset('images/support.svg') }}" alt="Sécurité" class="h-16 w-16">
+							<h3>Sécurité optimale</h3>
+						</div>
+						<div class="card-back">
+							<p>Vos données et transactions sont protégées à 100%.</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</section>
 
-	<section class="features-section bg-green-300 mt-10">
-	<div class="flex justify-center">
-    <h2 class="text-4xl font-semibold mt-20 mb-20">Pourquoi Choisir notre Banque ?</h2>
-	</div>
-    <div class="features">
-        <div class="feature-card ml-7">
-            <div class="card-inner">
-                <div class="card-front shadow-lg">
-                    <img src="{{ asset('images/transfer.svg') }}" alt="Virements" class="h-16 w-16">
-                    <h3>Virements rapides</h3>
-                </div>
-                <div class="card-back" >
-                    <p>Envoyez et recevez de l'argent instantanément.</p>
-                </div>
-            </div>
-        </div>
-        <div class="feature-card">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="{{ asset('images/savings.svg') }}" alt="Épargne" class="h-16 w-16">
-                    <h3>Comptes épargne</h3>
-                </div>
-                <div class="card-back">
-                    <p>Boostez vos économies avec nos taux compétitifs.</p>
-                </div>
-            </div>
-        </div>
-        <div class="feature-card">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="{{ asset('images/support.svg') }}" alt="Support" class="h-16 w-16">
-                    <h3>Assistance 24/7</h3>
-                </div>
-                <div class="card-back">
-                    <p>Notre équipe est disponible pour vous aider à tout moment.</p>
-                </div>
-            </div>
-        </div>
-        <div class="feature-card mb-40">
-            <div class="card-inner">
-                <div class="card-front">
-                    <img src="{{ asset('images/support.svg') }}" alt="Sécurité" class="h-16 w-16">
-                    <h3>Sécurité optimale</h3>
-                </div>
-                <div class="card-back">
-                    <p>Vos données et transactions sont protégées à 100%.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
+		<section class="accompany-section">
+			<h2>La meilleur banque pour vous
+				<span>accompagner</span>
+				dans vos dépenses et la gestion de votre budget</h2>
+			<article class="accompany-content">
+				<div class="accompany-img">
+					<img src="public/Images/startup-3267505_640" alt="Startup whiteboard room">
+				</div>
+				<div class="accompany-description">
+					<strong>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla fugit earum dolores soluta itaque iste vel minus suscipit consequuntur optio fuga amet unde ab, perferendis et nam consequatur assumenda. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+					</strong>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla fugit earum dolores soluta itaque iste vel minus suscipit consequuntur optio fuga amet unde ab, perferendis et nam consequatur assumenda. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla fugit earum dolores soluta itaque iste vel minus suscipit consequuntur optio fuga amet unde ab, perferendis et nam consequatur assumenda. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+					<a href="{{ path('register_customer') }}" class="btn btn-alt">Devenir client dès maintenant</a>
+				</div>
+			</article>
+		</section>
 
 		<section class="testimonials-section">
-			<h2>Ce que disent nos clients</h2>
+			<h2>Une banque
+				<span>approuvée</span>
+				par ses clients</h2>
 			<div class="testimonials">
+				<div class="testimonial">
+					<p>"Une expérience utilisateur exceptionnelle. Tout est rapide et simple."</p>
+					<span>- Marie Dupont</span>
+				</div>
+				<div class="testimonial">
+					<p>"Je peux enfin gérer mes finances sans stress. Merci pour ce service incroyable !"</p>
+					<span>- Jean Martin</span>
+				</div>
 				<div class="testimonial">
 					<p>"Une expérience utilisateur exceptionnelle. Tout est rapide et simple."</p>
 					<span>- Marie Dupont</span>
@@ -242,5 +365,9 @@
 				</div>
 			</div>
 		</section>
+
+		<footer class="website-footer">
+			<p>&copy; Hackathon - 2025</p>
+		</footer>
 	</div>
 {% endblock %}
