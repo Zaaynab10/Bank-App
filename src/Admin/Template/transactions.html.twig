@@ -28,8 +28,8 @@
                                         <span class="text-red-600 font-semibold">Failed</span>
                                     {% endif %}
                                 </p>
-                                <p class="text-sm text-gray-500">Source: {{ transaction.sourceAccount.accountNumber }}</p>
-                                <p class="text-sm text-gray-500">Destination: {{ transaction.destinationAccount.accountNumber }}</p>
+                                <p class="text-sm text-gray-500">Source: {{ transaction.sourceAccount.accountNumber ?? '-' }}</p>
+                                <p class="text-sm text-gray-500">Destination: {{ transaction.destinationAccount.accountNumber ?? '-' }}</p>
                             </div>
                         </li>
                     {% endfor %}

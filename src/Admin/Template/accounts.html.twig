@@ -70,7 +70,7 @@
                             </div>
                             <a href="{{ path('admin_account_transactions', { id: user.id, accountId: account.id }) }}" class="view-transactions-link inline-block">Voir les transactions</a>
                             
-                            <form action="{{ path('toggle_bank_account_status', { userId: user.id, accountId: account.id }) }}" method="POST" class="inline-block mt-4">
+                            <form action="{{ path('toggle_account_status', { userId: user.id, accountId: account.id }) }}" method="POST" class="inline-block mt-4">
                                 <button type="submit" class="toggle-status-btn py-2 px-4 rounded-md {{ account.status.value == 'active' ? 'bg-red-500' : 'bg-green-500' }} text-white font-semibold hover:{{ account.status.value == 'active' ? 'bg-red-600' : 'bg-green-600' }} transition">
                                     {% if account.status.value == 'active' %} Désactiver {% else %} Activer {% endif %}
                                 </button>
@@ -99,7 +99,7 @@
                             </div>
                             <a href="{{ path('admin_account_transactions', { id: user.id, accountId: account.id }) }}" class="view-transactions-link inline-block">Voir les transactions</a>
                             
-                            <form action="{{ path('toggle_bank_account_status', { userId: user.id, accountId: account.id }) }}" method="POST" class="inline-block mt-4">
+                            <form action="{{ path('toggle_account_status', { userId: user.id, accountId: account.id }) }}" method="POST" class="inline-block mt-4">
                                 <button type="submit" class="toggle-status-btn py-2 px-4 rounded-md {{ account.status.value == 'active' ? 'bg-red-500' : 'bg-green-500' }} text-white font-semibold hover:{{ account.status.value == 'active' ? 'bg-red-600' : 'bg-green-600' }} transition">
                                     {% if account.status.value == 'active' %} Désactiver {% else %} Activer {% endif %}
                                 </button>

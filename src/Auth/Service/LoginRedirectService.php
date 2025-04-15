@@ -19,7 +19,7 @@ class LoginRedirectService
     public function redirectUserBasedOnRole(): string
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {
-            return $this->router->generate('home_admin_dash');
+            return $this->router->generate('admin_home');
         }
 
         if ($this->security->isGranted('ROLE_CUSTOMER')) {
