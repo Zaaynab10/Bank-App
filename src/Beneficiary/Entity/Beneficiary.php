@@ -3,7 +3,7 @@
 namespace App\Beneficiary\Entity;
 
 use App\Auth\Entity\User;
-use App\Repository\BeneficiaryRepository;
+use App\Beneficiary\Repository\BeneficiaryRepository ;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -25,7 +25,7 @@ class Beneficiary
     #[ORM\Column(length: 255)]
     private ?string $bankAccountNumber = null;
 
-    #[ORM\ManyToOne(inversedBy: 'beneficiary')]
+    #[ORM\ManyToOne(inversedBy: 'beneficiaries')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $member = null;
 

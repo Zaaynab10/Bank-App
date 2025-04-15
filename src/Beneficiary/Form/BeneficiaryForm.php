@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Form;
+namespace App\Beneficiary\Form;
 
-use App\Beneficiary\Entity\Beneficiary;
+use App\Beneficiary\Entity\Beneficiary ;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BeneficiaryType extends AbstractType
+class BeneficiaryForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

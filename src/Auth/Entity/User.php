@@ -4,6 +4,7 @@ namespace App\Auth\Entity;
 
 use App\Account\Entity\Account;
 use App\Auth\Repository\UserRepository;
+use App\Beneficiary\Entity\Beneficiary;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -41,11 +42,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\OneToMany(targetEntity: Account::class, mappedBy: 'owner')]
-    private Collection $accounts;
+    private Collection $bankAccounts;
+
+    /**
+     * @var Collection<int, Beneficiary>
+     */
+    #[ORM\OneToMany(targetEntity: Beneficiary::class, mappedBy: 'member', orphanRemoval: true)]
+    private Collection $beneficiary;
 
     public function __construct()
     {
-        $this->accounts = new ArrayCollection();
+        $this->bankAccounts = new ArrayCollection();
+        $this->beneficiary = new ArrayCollection();
     }
 
     public function getFirstName(): ?string {
@@ -81,7 +89,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string {
         return $this->email;
     }
-
+    public function getName(): ?string
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+    
     public function setEmail(string $email): static {
         $this->email = $email;
         return $this;
@@ -113,24 +125,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void {}
 
-    public function getAccounts(): Collection {
-        return $this->accounts;
+    public function getBankAccounts(): Collection {
+        return $this->bankAccounts;
     }
 
-    public function addBankAccount(Account $account): static {
-        if (!$this->accounts->contains($account)) {
-            $this->accounts->add($account);
-            $account->setOwner($this);
+    public function addBankAccount(Account $bankAccount): static {
+        if (!$this->bankAccounts->contains($bankAccount)) {
+            $this->bankAccounts->add($bankAccount);
+            $bankAccount->setOwner($this);
         }
         return $this;
     }
 
-    public function removeBankAccount(Account $account): static {
-        if ($this->accounts->removeElement($account)) {
-            if ($account->getOwner() === $this) {
-                $account->setOwner(null);
+    public function removeBankAccount(Account $bankAccount): static {
+        if ($this->bankAccounts->removeElement($bankAccount)) {
+            if ($bankAccount->getOwner() === $this) {
+                $bankAccount->setOwner(null);
             }
         }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Beneficiary>
+     */
+    public function getBeneficiary(): Collection
+    {
+        return $this->beneficiary;
+    }
+
+    public function addBeneficiary(Beneficiary $beneficiary): static
+    {
+        if (!$this->beneficiary->contains($beneficiary)) {
+            $this->beneficiary->add($beneficiary);
+            $beneficiary->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeneficiary(Beneficiary $beneficiary): static
+    {
+        if ($this->beneficiary->removeElement($beneficiary)) {
+            if ($beneficiary->getMember() === $this) {
+                $beneficiary->setMember(null);
+            }
+        }
+
         return $this;
     }
 

@@ -39,13 +39,13 @@ doctrine:
         dir: "%kernel.project_dir%/src/Transactions/Entity"
         prefix: 'App\Transactions\Entity'
         alias: Transactions
-
+        
       Beneficiary:
-        type: attribute
-        is_bundle: false
-        dir: "%kernel.project_dir%/src/Beneficiary/Entity"
-        prefix: 'App\Beneficiary\Entity'
-        alias: Beneficiary
+       type: attribute
+       is_bundle: false
+       dir: "%kernel.project_dir%/src/Beneficiary/Entity"
+       prefix: 'App\Beneficiary\Entity'
+       alias: Beneficiary
 
     controller_resolver:
       auto_mapping: false

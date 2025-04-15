@@ -4,7 +4,7 @@ namespace App\Beneficiary\Controller;
 
 use App\Account\Repository\AccountRepository;
 use App\Beneficiary\Entity\Beneficiary;
-use App\Form\BeneficiaryType;
+use App\Beneficiary\Form\BeneficiaryForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,7 @@ final class BeneficiaryController extends AbstractController
         $beneficiary = new Beneficiary();
         $beneficiary->setMember($user);
 
-        $form = $this->createForm(BeneficiaryType::class, $beneficiary);
+        $form = $this->createForm(BeneficiaryForm::class, $beneficiary);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
