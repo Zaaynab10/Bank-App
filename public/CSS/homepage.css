@@ -93,61 +93,62 @@ body {
     color: #ffffff;
 }
 
-/* Section des services */
-.features-section {
-    padding: 50px 20px;
-    background-color: rgba(255, 255, 255, 0.8);
-    text-align: center;
-}
-
-.features-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    color: #2c3e50;
-}
-
 .features {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 30px;
-    margin-top: 20px;
 }
 
-.feature {
-    text-align: center;
-    max-width: 300px;
-    background: rgb(182, 182, 182);
-    background: -moz-linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
-    background: -webkit-linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
-    background: linear-gradient(180deg, rgba(182, 182, 182, 1) 0%, rgba(207, 211, 242, 1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b6b6b6", endColorstr="#cfd3f2", GradientType=1);
-    background-repeat: no-repeat;
-    padding: 20px;
+.feature-card {
+    width: calc(25% - 30px);
+    perspective: 1000px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    padding-top: 100%; /* carré */
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+}
+
+.feature-card:hover .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
+    backface-visibility: hidden;
+    background: linear-gradient(180deg, #b6b6b6 0%, #cfd3f2 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.feature:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+.card-front img {
+    width: 60px;
+    margin-bottom: 15px;
 }
 
-.feature img {
-    width: 80px;
-    margin-bottom: 20px;
-}
-
-.feature h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+.card-front h3 {
+    font-size: 1.2rem;
     color: #2c3e50;
 }
 
-.feature p {
+.card-back {
+    transform: rotateY(180deg);
     font-size: 1rem;
-    color: #666666;
+    color: #333;
+    background-color: #ffffff;
 }
 
 /* Section des témoignages */
