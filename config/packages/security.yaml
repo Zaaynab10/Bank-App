@@ -16,7 +16,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            #custom_authenticator: App\Security\AppCustomAuthenticator
+            custom_authenticator: App\Auth\Security\AppCustomAuthenticator
             logout:
                 path: logout
                 target: login
@@ -30,11 +30,11 @@ security:
                 lifetime: 604800
                 path: /
             security:
-            form_login: 
-                login_path: login
-                check_path: login
-                default_target_path: post_login # Où rediriger l'utilisateur après la connexion
-                enable_csrf: false
+#            form_login:
+#                login_path: login
+#                check_path: login
+#                default_target_path: post_login # Où rediriger l'utilisateur après la connexion
+#                enable_csrf: false
                 # by default, the feature is enabled by checking a checkbox in the
                 # login form, uncomment the following line to always enable it.
                 #always_remember_me: true

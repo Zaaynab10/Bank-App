@@ -12,7 +12,7 @@ class HomeController extends AbstractController {
     #[Route('/', name: 'homepage')]
     public function index(SecurityBundleSecurity $security): Response {
         if ($security->getUser()) {
-            return $this->redirectToRoute('accounts');
+            return $this->redirectToRoute('post_login');
         }
 
         return $this->render('@Home/index.html.twig');
