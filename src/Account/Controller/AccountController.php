@@ -8,6 +8,7 @@ use App\Account\Enum\AccountType;
 use App\Account\Form\AccountForm as BankAccountFormType;
 use App\Account\Repository\AccountRepository;
 use App\Account\Service\AccountService;
+use App\Transactions\Entity\Transaction;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,4 +104,56 @@ final class AccountController extends AbstractController
             'accountId' => $accountId,
         ]);
     }
+
+    #[Route('/{accountId}/stats', name: 'account_stats', methods: ['GET'])]
+    #[IsGranted('ROLE_CUSTOMER')]
+    public function accountStats(int $accountId, EntityManagerInterface $entityManager): Response
+    {
+        $user = $this->getUser();
+        $account = $entityManager->getRepository(Account::class)->find($accountId);
+    
+        if (!$account || $account->getOwner() !== $user) {
+            throw $this->createAccessDeniedException('Vous ne pouvez voir que les comptes qui vous appartiennent.');
+        }
+    
+        $transactionRepo = $entityManager->getRepository(Transaction::class);
+    
+        $expenses = $transactionRepo->findBy(['source_account' => $account]);
+        $incomes = $transactionRepo->findBy(['destination_account' => $account]);
+    
+        $stats = [];
+    
+        foreach (array_merge($expenses, $incomes) as $transaction) {
+            $month = $transaction->getDateTime()->format('Y-m');
+            if (!isset($stats[$month])) {
+                $stats[$month] = [
+                    'income' => 0,
+                    'expense' => 0,
+                    'balance' => 0,
+                ];
+            }
+    
+            if ($transaction->getSourceAccount() === $account) {
+                $stats[$month]['expense'] += $transaction->getAmount();
+            }
+    
+            if ($transaction->getDestinationAccount() === $account) {
+                $stats[$month]['income'] += $transaction->getAmount();
+            }
+    
+            $stats[$month]['balance'] = $stats[$month]['income'] - $stats[$month]['expense'];
+        }
+    
+        ksort($stats);
+    
+        return $this->render('@Account/account_stats.html.twig', [
+            'chartData' => json_encode($stats),
+            'accountId' => $accountId,
+        ]);
+    }
+    
+    
+
+    
 }
+

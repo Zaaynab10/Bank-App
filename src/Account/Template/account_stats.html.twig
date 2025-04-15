@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistiques du Compte</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Statistiques du compte ID : {{ accountId }}</h1>
+
+    <h2>Solde mensuel (Balance)</h2>
+    <canvas id="balanceChart"></canvas>
+
+    <h2>Revenus vs Dépenses par mois</h2>
+    <canvas id="incomeExpenseChart"></canvas>
+
+    <script>
+        const rawData = {{ chartData|raw }};
+
+        const months = Object.keys(rawData);
+        const incomeData = months.map(m => rawData[m].income);
+        const expenseData = months.map(m => rawData[m].expense);
+        const balanceData = months.map(m => rawData[m].balance);
+
+        // Balance chart
+        new Chart(document.getElementById('balanceChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Solde net (EUR)',
+                    data: balanceData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('incomeExpenseChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        label: 'Revenus (EUR)',
+                        data: incomeData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Dépenses (EUR)',
+                        data: expenseData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
