@@ -11,6 +11,8 @@
        class="bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-md transition">Dépôt</a>
     <a href="{{ path('transfer') }}"
        class="bg-yellow-500 hover:bg-yellow-700 text-white px-6 py-2 rounded-md transition">Virement</a>
+    <a href="{{ path('account_stats', { accountId: accountId }) }}"
+       class="bg-purple-500 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition">Statistiques</a>
   </div>
 
   <!-- Liste des transactions -->
