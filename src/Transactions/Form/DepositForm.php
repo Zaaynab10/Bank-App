@@ -11,38 +11,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class DepositForm extends AbstractType {
-    private AccountRepository $accountRepository;
-
-    public function __construct(AccountRepository $accountRepository) {
-        $this->accountRepository = $accountRepository;
-    }
-
-    public function buildForm(FormBuilderInterface $builder, array $options): void {
-        $user = $options['user'];
-
-        $accounts = $this->accountRepository->findBy(['owner' => $user]);
-
-        if (empty($accounts)) {
-            throw new \Exception("No bank accounts found for this user.");
-        }
-
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
         $builder
-            ->add('account', ChoiceType::class, [
-                'choices' => array_flip(array_map(function ($account) {
-                    return $account->getId() . ' - ' . $account->getType()->value;
-                }, $accounts)),
-                'mapped' => false,
-                'label' => 'Select Account',
-                'expanded' => false,
-                'multiple' => false,
-            ])
             ->add('amount', IntegerType::class, [
-                'label' => 'Deposit Amount',
-                'attr' => ['min' => 1],
+                'label' => 'Montant à déposer',
+                'attr' => ['min' => 1],  
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void {
+    public function configureOptions(OptionsResolver $resolver): void
+    {
         $resolver->setDefaults([
             'data_class' => Transaction::class,
             'user' => null,

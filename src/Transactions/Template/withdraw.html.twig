@@ -1,31 +1,30 @@
-{% extends 'base.html.twig' %}
-
-{% block stylesheets %}
-    <script src="https://cdn.tailwindcss.com"></script>
-{% endblock %}
-
-{% block title %}Retrait de fonds{% endblock %}
-
-{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Retrait de fonds</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
     <div class="max-w-lg mx-auto bg-white p-8 mt-10 rounded-lg shadow-md">
         <h1 class="text-2xl font-semibold text-center text-gray-700 mb-6">Retirer des fonds</h1>
 
-        {{ form_start(form, { 'attr': { 'class': 'space-y-6' } }) }}
+        <form method="post" class="space-y-6">
+            {{ form_start(form, { 'attr': { 'class': 'space-y-6' } }) }}
 
-        <div>
-            {{ form_label(form.account, 'Compte bancaire', { 'label_attr': { 'class': 'block text-gray-600 font-medium mb-2' } }) }}
-            {{ form_widget(form.account, { 'attr': { 'class': 'w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none' } }) }}
-        </div>
+            <p>Compte sélectionné : {{ app.session.get('bank_account_id') }}</p> 
 
-        <div>
-            {{ form_label(form.amount, 'Montant', { 'label_attr': { 'class': 'block text-gray-600 font-medium mb-2' } }) }}
-            {{ form_widget(form.amount, { 'attr': { 'class': 'w-full p-3 border rounded-md focus:ring-2 focus:ring-red-500 focus:outline-none', 'min': '1' } }) }}
-        </div>
+            <div>
+                {{ form_label(form.amount, null, { 'label_attr': { 'class': 'block text-gray-600 font-medium mb-2' } }) }}
+                {{ form_widget(form.amount, { 'attr': { 'class': 'w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none' } }) }}
+            </div>
 
-        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 rounded-md transition">
-            Retirer
-        </button>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-md transition">
+                Retirer
+            </button>
 
-        {{ form_end(form) }}
+            {{ form_end(form) }}
+        </form>
     </div>
-{% endblock %}
+</body>
+</html>

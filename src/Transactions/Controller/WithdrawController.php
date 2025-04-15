@@ -7,7 +7,7 @@ use App\Transactions\Entity\Transaction;
 use App\Transactions\Enum\TransactionType;
 use App\Transactions\Form\WithdrawForm;
 use App\Transactions\Service\TransactionService;
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,52 +20,55 @@ final class WithdrawController extends AbstractController {
     #[IsGranted('ROLE_CUSTOMER')]
     public function MakeWithdrawal(
         Request                $request,
-        EntityManagerInterface $entityManager,
         TransactionService     $transactionService,
+        SessionInterface $session,
 
         AccountRepository      $accountRepository
 
-    ): Response {
-        $user = $this->getUser();
+    ):Response {
+    $user = $this->getUser();
 
-        $transaction = new Transaction();
+    $bankAccountId = $session->get('bank_account_id');
+    if (!$bankAccountId) {
+        throw $this->createAccessDeniedException('No bank account selected in the session.');
+    }
 
-        $form = $this->createForm(WithdrawForm::class, $transaction, [
-            'user' => $user,
-        ]);
+    $bankAccount = $accountRepository->find($bankAccountId);
+    if (!$bankAccount) {
+        throw $this->createAccessDeniedException('Bank account not found.');
+    }
 
-        $form->handleRequest($request);
+    if ($bankAccount->getOwner() !== $user) {
+        throw $this->createAccessDeniedException('You do not own this account.');
+    }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $accountIndex = (int)$form->get('account')->getData();
-            $amount = $form->get('amount')->getData();
-            $accounts = $accountRepository->findBy([], ['id' => 'ASC']);
-            $account = $accounts[$accountIndex];
-            dump($account);
-            if (!$account->isActive()) {
-                throw new AccessDeniedException('Le compte source est inactif. Transaction refusée.');
-            }
+    if (!$bankAccount->isActive()) {
+        throw new AccessDeniedException('Le compte source est inactif. Transaction refusée.');
+    }
 
-            if (!$account || $account->getOwner() !== $user) {
-                throw $this->createAccessDeniedException('You do not own this account.');
-            }
+    $transaction = new Transaction();
+    $transaction->setSourceAccount($bankAccount); // Définir le compte automatiquement comme source
 
+    $form = $this->createForm(WithdrawForm::class, $transaction);
 
-            if (!$account || $account->getOwner() !== $user) {
-                $transactionService->createFailedTransaction($amount, $account, $account, TransactionType::WITHDRAWAL, $entityManager);
+    $form->handleRequest($request);
 
-                throw $this->createAccessDeniedException('You do not own this account.');
-            }
+    if ($form->isSubmitted() && $form->isValid()) {
+        $amount = $form->get('amount')->getData();
 
-            $transactionService->processTransaction($amount, $account, $account, TransactionType::WITHDRAWAL);
-
-            return $this->redirectToRoute('account', [
-                'accountId' => $account->getId(),
-            ]);
+        if (!$bankAccount->canWithdraw($amount)) {
+            throw $this->createAccessDeniedException('Withdrawal denied, insufficient funds or limit exceeded.');
         }
 
-        return $this->render('@Transactions/withdraw.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
+        $transactionService->processTransaction($amount, $bankAccount, $bankAccount, TransactionType::WITHDRAWAL);
+
+        return $this->redirectToRoute('account', [
+            'accountId' => $bankAccountId,
+        ]);    }
+    return $this->render('@Transactions/withdraw.html.twig', [
+        'form' => $form->createView(),
+    ]);
 }
+
+}
+

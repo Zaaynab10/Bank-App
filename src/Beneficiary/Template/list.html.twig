@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Liste des bénéficiaires</title>
+</head>
+<body>
+    <h1>Mes bénéficiaires</h1>
+
+    {% if beneficiaries is empty %}
+        <p>Aucun bénéficiaire trouvé.</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Numéro de compte</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for beneficiary in beneficiaries %}
+                    <tr>
+                        <td>{{ beneficiary.name }}</td>
+                        <td>{{ beneficiary.bankAccountNumber }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>

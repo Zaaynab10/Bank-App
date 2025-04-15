@@ -22,8 +22,12 @@ admin:
     type: attribute
     prefix: /admin
 
-
 admin_add_user:
     path: /admin/add-user
     controller: App\Controller\AdminDashController::addUser
     methods: POST
+
+beneficiary:
+    resource: '../src/Beneficiary/Controller/'
+    type: attribute
+    prefix: /beneficiary

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class AccountController extends AbstractController
 {
@@ -91,10 +92,12 @@ final class AccountController extends AbstractController
 
     #[Route('/{accountId}', name: 'account')]
     #[IsGranted('ROLE_CUSTOMER')]
-    public function showAccountTransactions(int $accountId): Response
+    public function showAccountTransactions(int $accountId ,  SessionInterface $session): Response
     {
         $transactions = $this->accountService->getAccountTransactions($accountId);
 
+        $session->set('bank_account_id', $accountId);
+     
         return $this->render('@Account/account.html.twig', [
             'transactions' => $transactions,
             'accountId' => $accountId,
