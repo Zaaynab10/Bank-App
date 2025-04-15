@@ -2,7 +2,9 @@
 
 namespace App\Admin\Controller;
 
+use App\Account\Enum\AccountStatus;
 use App\Account\Repository\AccountRepository;
+use App\Account\Service\AccountService;
 use App\Auth\Entity\User;
 use App\Auth\Repository\UserRepository;
 use App\Auth\Service\UserSearchService;
@@ -16,16 +18,18 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final class AdminDashController extends AbstractController
+final class AdminController extends AbstractController
 {
     private UserSearchService $userSearchService;
+    private $accountService;
 
-    public function __construct(UserSearchService $userSearchService)
+    public function __construct(UserSearchService $userSearchService, AccountService $accountService)
     {
         $this->userSearchService = $userSearchService;
+        $this->accountService = $accountService;
     }
 
-    #[Route('/dash', name: 'home_admin_dash')]
+    #[Route('/', name: 'admin_home')]
     #[IsGranted('ROLE_ADMIN')]
     public function index(
         UserRepository        $userRepository,
@@ -68,29 +72,28 @@ final class AdminDashController extends AbstractController
         return new JsonResponse($data);
     }
 
-    #[Route('/user/{id}', name: 'admin_user_detail')]
+    #[Route('/users/{id}', name: 'admin_user_detail')]
     public function userDetail(
         int                   $id,
         UserRepository        $userRepository,
         AccountRepository     $bankAccountRepository,
-        TransactionRepository $transactionRepository
     ): Response {
         $user = $userRepository->find($id);
         if (!$user) {
             throw $this->createNotFoundException("L'utilisateur demandé n'existe pas.");
         }
 
-        $transactions = $transactionRepository->findTransactionsByUserId($id);
+        $transactions = [];
         $bankAccounts = $bankAccountRepository->findBy(['owner' => $id]);
 
-        return $this->render('admin/userDetail.html.twig', [
+        return $this->render('@Admin/userDetail.html.twig', [
             'user' => $user,
             'bankAccounts' => $bankAccounts,
             'transactions' => $transactions,
         ]);
     }
 
-    #[Route('/add-user', name: 'admin_add_user', methods: ['POST'])]
+    #[Route('/users/add', name: 'admin_add_user', methods: ['POST'])]
     public function addUser(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
@@ -109,6 +112,76 @@ final class AdminDashController extends AbstractController
 
         $this->addFlash('success', 'Utilisateur ajouté avec succès !');
 
-        return $this->redirectToRoute('home_admin_dash');
+        return $this->redirectToRoute('admin_home');
+    }
+
+    #[Route('/users', name: 'admin_users_list')]
+    public function listUsers(UserRepository $userRepository) {
+        $users = $userRepository->findAll();
+        $userData = [];
+        foreach ($users as $user) {
+            $userData[] = [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+            ];
+        }
+        return $this->render('@Admin/users.html.twig', [
+            'users' => $userData
+        ]);
+    }
+
+    #[Route('/users/{id}/accounts', name: 'admin_user_accounts')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function showUserAccounts(int $id, UserRepository $userRepository, AccountRepository $bankAccountRepository) {
+        $user = $userRepository->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException("User not found.");
+        }
+
+        $bankAccounts = $bankAccountRepository->findBy(['owner' => $user]);
+
+        return $this->render('@Admin/accounts.html.twig', [
+            'user' => $user,
+            'bankAccounts' => $bankAccounts,
+        ]);
+    }
+
+    #[Route('/accounts/{accountId}/transactions', name: 'admin_account_transactions')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function showAccountTransactions(int $accountId): Response {
+        $transactions = $this->accountService->getAccountTransactions($accountId);
+
+        return $this->render('@Admin/transactions.html.twig', [
+            'transactions' => $transactions,
+            'accountId' => $accountId,
+        ]);
+    }
+
+    #[Route('/accounts/{accountId}/toggle-status', name: 'toggle_account_status')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function toggleStatus(int $accountId,
+                                 AccountRepository $accountRepository,
+                                 EntityManagerInterface $entityManager): Response {
+
+        $account = $accountRepository->find($accountId);
+
+        if (!$account) {
+            throw $this->createNotFoundException("Bank account not found.");
+        }
+
+        if ($account->getStatus() === AccountStatus::ACTIVE) {
+            $account->setStatus(AccountStatus::CLOSE);
+        } else {
+            $account->setStatus(AccountStatus::ACTIVE);
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_user_accounts', [
+            'id' => $account->getOwner()->getId(),
+        ]);
     }
 }
