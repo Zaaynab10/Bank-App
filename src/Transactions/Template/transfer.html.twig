@@ -17,10 +17,8 @@
             {{ form_widget(form.amount, { 'attr': { 'class': 'w-full p-3 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none', 'min': '1' } }) }}
         </div>
 
-        <div>
-            {{ form_label(form.source_account, 'Compte source', { 'label_attr': { 'class': 'block text-gray-600 font-medium mb-2' } }) }}
-            {{ form_widget(form.source_account, { 'attr': { 'class': 'w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none' } }) }}
-        </div>
+                  <p>Compte sélectionné : {{ app.session.get('bank_account_id') }}</p> 
+
 
         <div>
             {{ form_label(form.destination_account_number, 'Numéro du compte destinataire', { 'label_attr': { 'class': 'block text-gray-600 font-medium mb-2' } }) }}

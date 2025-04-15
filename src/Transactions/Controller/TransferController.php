@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Transactions\Controller;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 use App\Account\Repository\AccountRepository;
+use App\Beneficiary\Entity\Beneficiary;
 use App\Transactions\Entity\Transaction;
-use App\Transactions\Enum\TransactionStatus;
 use App\Transactions\Enum\TransactionType;
 use App\Transactions\Form\TransferForm;
 use App\Transactions\Service\TransactionService;
@@ -20,49 +21,48 @@ final class TransferController extends AbstractController
 {
     #[Route('/transfer', name: 'transfer')]
     #[IsGranted('ROLE_CUSTOMER')] 
+    public function MakeTransfer(
+        Request $request,
+        AccountRepository $bankAccountRepository,
+        TransactionService $transactionService, 
+        EntityManagerInterface $entityManager,
+        SessionInterface $session,
 
-    public function MakeTransfer(Request                $request,
-                                 AccountRepository      $accountRepository,
-                                 TransactionService     $transactionService,
-                                 EntityManagerInterface $entityManager,
-                            ): Response
-    {
+    ): Response {
         $user = $this->getUser();
         
-        $accounts = $accountRepository->findBy(['owner' => $user]);
-    
+        $bankAccounts = $bankAccountRepository->findBy(['owner' => $user]);
+
+        $beneficiaries = $entityManager->getRepository(Beneficiary::class)->findBy(['member' => $user]);
+
         $transaction = new Transaction();
-    
+
         $form = $this->createForm(TransferForm::class, $transaction, [
             'user' => $user,
-            'accounts' => $accounts,
+            'bank_accounts' => $bankAccounts,
+            'beneficiaries' => $beneficiaries,
         ]);
-    
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $sourceAccount = $form->get('source_account')->getData();
-            $destinationAccountNumber = $form->get('destination_account_number')->getData();
-            $amount = $form->get('amount')->getData();
-    
-            if ($sourceAccount === null) {
 
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sourceAccount =$bankAccountRepository->find( $session->get('bank_account_id')) ;
+            $destinationAccountNumber = $form->get('destination_account_number')->getData()->getBankAccountNumber();
+            $amount = $form->get('amount')->getData();
+
+            if ($sourceAccount === null) {
                 throw $this->createNotFoundException('Source account not found.');
             }
-    
-            $destinationAccount = $accountRepository->findOneBy(['account_number' => $destinationAccountNumber]);
-    
-            if ($destinationAccount === null) {
 
+            $destinationAccount = $bankAccountRepository->findOneBy(['account_number' => $destinationAccountNumber]);
+
+            if ($destinationAccount === null) {
                 throw $this->createNotFoundException('Destination account not found.');
             }
-    
+
             if ($sourceAccount->getOwner() !== $user) {
-
                 throw $this->createAccessDeniedException('You do not own the source account.');
-
             }
-    
 
             if (!$sourceAccount->isActive()) {
                 throw new AccessDeniedException('Le compte source est inactif. Transaction refusée.');
@@ -73,18 +73,18 @@ final class TransferController extends AbstractController
             }
 
             if (!$destinationAccount->canDeposit($amount)) {
-                $transactionService->createFailedTransaction($amount, $sourceAccount, $destinationAccount, TransactionType::TRANSFER , $entityManager);
-
+                $transactionService->createFailedTransaction($amount, $sourceAccount, $destinationAccount, TransactionType::TRANSFER, $entityManager);
                 throw $this->createAccessDeniedException('Transfer denied: the savings account has exceeded its deposit limit of 25,000.');
             }
 
             $transactionService->processTransaction($amount, $sourceAccount, $destinationAccount, TransactionType::TRANSFER);
 
-            return $this->redirectToRoute('account', [
-                'accountId' => $sourceAccount->getId(),
-            ]);
+          
+
+            
+            return $this->redirectToRoute('accounts');
         }
-    
+
         return $this->render('@Transactions/transfer.html.twig', [
             'form' => $form->createView(),
         ]);
