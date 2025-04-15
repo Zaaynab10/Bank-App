@@ -47,7 +47,7 @@ final class WithdrawController extends AbstractController {
     }
 
     $transaction = new Transaction();
-    $transaction->setSourceAccount($bankAccount); // Définir le compte automatiquement comme source
+    $transaction->setSourceAccount($bankAccount); 
 
     $form = $this->createForm(WithdrawForm::class, $transaction);
 

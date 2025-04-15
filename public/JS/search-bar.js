@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const userCard = document.createElement('div');
             userCard.classList.add('user-card');
             userCard.innerHTML = `
-                <a href="/admin/user/${user.id}" class="user-link">
+<a href="/admin/users/${user.id}/accounts" class="user-link">
                     <img src="${user.profilePicture || '/images/user.svg'}" alt="${user.name || 'Utilisateur'}" class="user-avatar">
                     <div class="user-info">
                         <h3>${user.name || 'Nom indisponible'}</h3>
