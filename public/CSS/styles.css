@@ -1,25 +1,11 @@
 * {
     padding: 0;
     margin: 0;
-}
-
-/* Global styles for the login page */
-.login-page {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     font-family: Arial, sans-serif;
 }
 
+/* Stylisation de la page de connexion */
 .register-page {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,25 +26,31 @@
 
 /* Logo */
 .logo {
-    margin-block: 57px;
+    margin-block: 3vw;
     text-align: center;
+
+    img {
+        max-width: 225px;
+    }
 }
 
-.logo img {
-    max-width: 200px;
-}
-
-/* Title */
+/* Titre */
 .welcome-title {
-    font-size: 80px;
+    font-size: 3.5vw;
     text-align: center;
-    align-items: center;
     color: white;
-    margin-bottom: 30px;
+    margin-bottom: 5vw;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-/* Form styles */
+/* Stylisation du formulaire */
+.form-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 3vw;
+}
+
 .login-form,
 .register-form {
     background: rgb(255, 255, 255, 0);
@@ -66,7 +58,7 @@
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     color: rgb(0, 0, 0);
 }
 
