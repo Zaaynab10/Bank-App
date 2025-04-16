@@ -1,18 +1,185 @@
 {% extends 'base-client.html.twig' %}
 
-{% block title %}Create Bank Account{% endblock %}
+{% block title %}Ouvrir un compte {% endblock %}
 
 {% block main %}
-  <h2>Create a New Bank Account</h2>
+<div class="min-h-screen bg-gradient-to-br from-red-50 to-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+        <span class="block">Ouvrez votre compte</span>
+        <span class="block text-red-600">en 2 étapes simples</span>
+      </h1>
+      <div class="mt-8 flex justify-center">
+        <div class="flex items-center">
+          <div class="flex flex-col items-center mr-8">
+            <div class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg">1</div>
+            <span class="mt-2 text-sm font-medium text-gray-900">Type de compte</span>
+          </div>
+          <div class="h-1 w-16 bg-gray-300"></div>
+          <div class="flex flex-col items-center ml-8">
+            <div class="w-12 h-12 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center font-bold text-lg">2</div>
+            <span class="mt-2 text-sm font-medium text-gray-500">Confirmation</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  {{ form_start(form) }}
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+      <div class="md:flex">
+        <div class="md:w-1/2 p-8 sm:p-12">
+          {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
 
-  <div class="mb-3">
-    {{ form_label(form.type, 'Account Type') }}
-    {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+          <div>
+            <h2 class="text-xl font-bold text-gray-900 mb-6">Sélectionnez votre type de compte</h2>
+            <div class="space-y-4">
+              {% for child in form.type %}
+                <div class="relative">
+                  {{ form_widget(child, {
+                    'attr': {
+                      'class': 'peer hidden',
+                      'data-type': child.vars.value
+                    }
+                  }) }}
+                  <label for="{{ child.vars.id }}" class="block">
+                    <div class="p-6 border-2 border-gray-200 rounded-xl hover:border-red-500 peer-checked:border-red-600 peer-checked:bg-red-50 transition-all duration-200 cursor-pointer">
+                      <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                          {% if child.vars.value == constant('App\\Account\\Enum\\AccountType::CURRENT') %}
+                            <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                              </svg>
+                            </div>
+                          {% else %}
+                            <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
+                              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                            </div>
+                          {% endif %}
+                        </div>
+                        <div class="ml-4">
+                          <h3 class="text-lg font-medium text-gray-900">
+                            {{ form_label(child, null, {'label_attr': {'class': 'cursor-pointer'}}) }}
+                          </h3>
+<p class="mt-1 text-sm text-gray-500">
+  {% if child.vars.value == 0 %}
+    Accès immédiat • Carte gratuite • Virements illimités
+  {% elseif child.vars.value == 1 %}
+    Taux 0.5% • Capital garanti • Épargnez facilement
+  {% else %}
+    Valeur inconnue: {{ child.vars.value }}
+  {% endif %}
+</p>
+
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+            {{ form_errors(form.type) }}
+          </div>
+
+          <div id="savings-warning" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-yellow-700">
+                  Vous devez avoir un compte courant avec au moins 10€ pour ouvrir un compte épargne.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <button type="submit" id="submit-btn" class="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-xl shadow-sm text-lg font-bold text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-200 transform hover:scale-[1.02]">
+              Continuer
+              <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+
+          {{ form_end(form) }}
+        </div>
+
+        <div class="md:w-1/2 bg-gradient-to-br from-red-600 to-red-800 p-8 sm:p-12 flex flex-col justify-center">
+          <div class="text-white">
+            <h2 class="text-2xl font-bold mb-6">Vos avantages</h2>
+
+            <div class="space-y-6">
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <div class="w-10 h-10 rounded-full bg-red-500 bg-opacity-30 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-medium">100€ offerts</h3>
+                  <p class="mt-1 text-red-100">Crédités immédiatement sur votre nouveau compte</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <div class="w-10 h-10 rounded-full bg-red-500 bg-opacity-30 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-medium">Carte bancaire gratuite</h3>
+                  <p class="mt-1 text-red-100">Visa Classic sans frais annuels</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <div class="w-10 h-10 rounded-full bg-red-500 bg-opacity-30 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-medium">100% sécurisé</h3>
+                  <p class="mt-1 text-red-100">Protection avancée de vos fonds et données</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if app.flashes('error') %}
+      <div class="mt-8 bg-red-50 border-l-4 border-red-500 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-700">
+              {% for flash_message in app.flashes('error') %}
+                {{ flash_message }}
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
   </div>
-
-  <button type="submit" class="btn btn-primary">Create Account</button>
-
-  {{ form_end(form) }}
-{% endblock %}
+</div>
+{% endblock %} 

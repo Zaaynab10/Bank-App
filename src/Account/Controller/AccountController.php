@@ -19,59 +19,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class AccountController extends AbstractController
 {
-
-    #[Route('/create', name: 'create_account', methods: ['GET', 'POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager, AccountRepository $accountRepository): Response
-    {
-        $accounts = $accountRepository->findBy(['owner' => $this->getUser()]);
-        if (count($accounts) >= 5) {
-            throw $this->createAccessDeniedException('You can only have up to 5 bank accounts');
-        }
-
-        $isSavingsAccount = $request->get('type') === AccountType::SAVINGS->value;
-        if ($isSavingsAccount) {
-            $hasSufficientBalance = $this->hasValidCurrentAccount($accounts);
-            if (!$hasSufficientBalance) {
-                throw $this->createAccessDeniedException('You must have at least one current account with a balance of 10 or more to create a savings account');
-            }
-        }
-
-        $account = new Account();
-        $form = $this->createForm(BankAccountFormType::class, $account);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $account->setOwner($this->getUser());
-
-            $accountNumber = rand(1000000000, 9999999999);
-            $account->setAccountNumber((string)$accountNumber);
-
-            $account->setBalance(100);
-
-            $account->setStatus(AccountStatus::ACTIVE);
-
-            $entityManager->persist($account);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('accounts');
-        }
-
-        return $this->render('@Account/createAccount.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    private function hasValidCurrentAccount(array $bankAccounts): bool
-    {
-        foreach ($bankAccounts as $account) {
-            if ($account->getType() === AccountType::CURRENT && $account->getBalance() >= 10) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private $accountService;
 
     public function __construct(AccountService $accountService)
@@ -79,6 +26,87 @@ final class AccountController extends AbstractController
         $this->accountService = $accountService;
     }
 
+    #[Route('/create', name: 'create_account', methods: ['GET', 'POST'])]
+public function create(Request $request, EntityManagerInterface $entityManager, AccountRepository $accountRepository): Response
+{
+    $accounts = $accountRepository->findBy(['owner' => $this->getUser()]);
+    
+    if (count($accounts) >= 5) {
+        $this->addFlash('error', 'Vous ne pouvez avoir que 5 comptes maximum');
+        return $this->redirectToRoute('accounts');
+    }
+
+    $form = $this->createForm(BankAccountFormType::class);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $accountType = $form->get('type')->getData();
+        
+        if ($accountType === AccountType::SAVINGS->value && !$this->hasValidCurrentAccount($accounts)) {
+            $this->addFlash('error', 'Vous devez avoir un compte courant avec au moins 10€ pour ouvrir un compte épargne');
+            return $this->redirectToRoute('create_account');
+        }
+
+        $request->getSession()->set('new_account_data', [
+            'type' => $accountType
+        ]);
+
+        return $this->redirectToRoute('confirm_account');
+    }
+
+    return $this->render('@Account/createAccount.html.twig', [
+        'form' => $form->createView(),
+        'accounts' => $accounts
+    ]);
+}
+
+#[Route('/confirm', name: 'confirm_account', methods: ['GET', 'POST'])]
+public function confirm(Request $request, EntityManagerInterface $entityManager, AccountRepository $accountRepository): Response
+{
+    $accountData = $request->getSession()->get('new_account_data');
+    
+    if (!$accountData) {
+        return $this->redirectToRoute('create_account');
+    }
+
+    $accounts = $accountRepository->findBy(['owner' => $this->getUser()]);
+    if ($accountData['type'] === AccountType::SAVINGS->value && !$this->hasValidCurrentAccount($accounts)) {
+        $this->addFlash('error', 'Les conditions pour ouvrir un compte épargne ne sont plus remplies');
+        return $this->redirectToRoute('create_account');
+    }
+
+    if ($request->isMethod('POST')) {
+        $account = new Account();
+        $account->setType($accountData['type']);
+        $account->setOwner($this->getUser());
+        $account->setAccountNumber((string)rand(1000000000, 9999999999));
+        $account->setBalance(100); 
+        $account->setStatus(AccountStatus::ACTIVE);
+
+        $entityManager->persist($account);
+        $entityManager->flush();
+
+        $request->getSession()->remove('new_account_data');
+
+        $this->addFlash('success', 'Votre compte a été créé avec succès ! 100€ ont été crédités.');
+        return $this->redirectToRoute('accounts');
+    }
+
+    return $this->render('@Account/confirm.html.twig', [
+        'account_type' => $accountData['type']
+    ]);
+}
+
+private function hasValidCurrentAccount(array $bankAccounts): bool
+{
+    foreach ($bankAccounts as $account) {
+        if ($account->getType() === AccountType::CURRENT && $account->getBalance() >= 10) {
+            return true;
+        }
+    }
+    return false;
+}
+    
     #[Route('/', name: 'accounts')]
     #[IsGranted('ROLE_CUSTOMER')]
     public function showUserAccounts(): Response

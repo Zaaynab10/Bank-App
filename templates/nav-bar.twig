@@ -1,17 +1,135 @@
-<header class="bg-green-700 text-white p-4 shadow-md">
-  <div class="container mx-auto flex justify-between items-center">
-    
-    <div class="flex items-center gap-4">
-      <a href="{{ path('accounts') }}" class="flex items-center gap-2">
-        <img src="{{ asset('images/logo-clair.png') }}" alt="Logo Banque" class="h-10">
-      </a>
-    </div>
+<header class="bg-white text-red-800 shadow-lg">
+  <div class="container mx-auto px-4">
+    <nav class="flex items-center justify-between h-16">
+      <div class="flex items-center">
+        <a href="{{ path('accounts') }}" class="flex items-center group">
+          <img src="{{ asset('images/logo-clair.png') }}" alt="Logo Banque" class="h-10 transition-transform duration-300 group-hover:scale-105">
+        </a>
+      </div>
 
-    <div class="flex items-center gap-8">
-      <a href="{{ path('accounts') }}" class="text-lg font-semibold hover:underline">Mes Comptes</a>
-      <a href="{{ path('list_beneficiaries') }}" class="text-lg font-semibold hover:underline">Bénéficiaires</a>
-    </div>
+      <div class="hidden md:flex items-center space-x-1 h-full">
+        <a href="{{ path('accounts') }}" class="relative px-4 py-2 font-medium flex flex-col items-center group">
+          <span class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+              <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
+            </svg>
+            Mes Comptes
+          </span>
+          <span class="absolute bottom-0 h-1 w-0 bg-red-600 transition-all duration-300 group-hover:w-3/4"></span>
+        </a>
 
- 
+        <a href="{{ path('list_beneficiaries') }}" class="relative px-4 py-2 font-medium flex flex-col items-center group">
+          <span class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+              <path fill-rule="evenodd" d="M13 5a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+            </svg>
+            Bénéficiaires
+          </span>
+          <span class="absolute bottom-0 h-1 w-0 bg-red-600 transition-all duration-300 group-hover:w-3/4"></span>
+        </a>
+      </div>
+
+<div class="relative" id="user-menu-wrapper">
+  <button id="user-toggle" class="flex items-center space-x-2 focus:outline-none">
+    <div class="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white font-bold">
+      {{ app.user.firstname|first|upper }}{{ app.user.lastname|first|upper }}
+    </div>
+    <span class="hidden md:inline font-medium text-black">{{ app.user.firstname }}</span>
+    <svg xmlns="http://www.w3.org/2000/svg" id="arrow-icon" class="h-5 w-5 transition-transform duration-200"
+         viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd"
+            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            clip-rule="evenodd" />
+    </svg>
+  </button>
+
+  <div id="user-dropdown"
+       class="absolute right-0 mt-2 w-48 bg-yellow-100 rounded-lg shadow-xl hidden opacity-0 scale-95 transition-all duration-200 z-50">
+    <a href="{{ path('logout') }}"
+       class="block px-4 py-2 text-sm text-red-800 hover:bg-yellow-200 rounded">
+      Déconnexion
+    </a>
+  </div>
+</div>
+
+
+        <button class="md:hidden focus:outline-none" id="mobile-menu-button">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="md:hidden hidden origin-top-right" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1">
+        <a href="{{ path('accounts') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-red-600 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+            <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd" />
+          </svg>
+          Mes Comptes
+        </a>
+        <a href="{{ path('list_beneficiaries') }}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-red-600 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6z" />
+            <path fill-rule="evenodd" d="M13 5a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+          </svg>
+          Bénéficiaires
+        </a>
+      </div>
+    </div>
   </div>
 </header>
+
+<script>
+  const toggleBtn = document.getElementById('user-toggle');
+  const dropdown = document.getElementById('user-dropdown');
+  const arrow = document.getElementById('arrow-icon');
+  const wrapper = document.getElementById('user-menu-wrapper');
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); 
+    dropdown.classList.toggle('hidden');
+    dropdown.classList.toggle('opacity-0');
+    dropdown.classList.toggle('scale-95');
+    dropdown.classList.toggle('scale-100');
+    arrow.classList.toggle('rotate-180');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!wrapper.contains(e.target)) {
+      dropdown.classList.add('hidden');
+      dropdown.classList.add('opacity-0');
+      dropdown.classList.add('scale-95');
+      dropdown.classList.remove('scale-100');
+      arrow.classList.remove('rotate-180');
+    }
+  });
+
+  document.getElementById('mobile-menu-button').addEventListener('click', function () {
+    const menu = document.getElementById('mobile-menu');
+    menu.classList.toggle('hidden');
+    menu.classList.toggle('transform');
+    menu.classList.toggle('scale-95');
+    menu.classList.toggle('scale-100');
+  });
+</script>
+
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .group:hover .group-hover\:animate-fadeIn {
+    animation: fadeIn 0.2s ease-out forwards;
+  }
+
+  nav a {
+    transition: all 0.2s ease;
+  }
+</style>

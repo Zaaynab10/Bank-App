@@ -1,0 +1,60 @@
+{% extends 'base-client.html.twig' %}
+
+{% block title %}Confirmation{% endblock %}
+
+{% block main %}
+<div class="min-h-screen bg-gradient-to-br from-red-50 to-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+      <div class="p-8 sm:p-12">
+        <div class="text-center mb-10">
+          <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100">
+            <svg class="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h1 class="mt-4 text-2xl font-bold text-gray-900">Confirmez l'ouverture de votre compte</h1>
+          <p class="mt-2 text-gray-600">Vérifiez les détails avant validation</p>
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 p-6 rounded-2xl mb-10 shadow-sm">
+          <h2 class="text-lg font-semibold text-gray-800 mb-4">Récapitulatif</h2>
+          <div class="space-y-4 text-sm sm:text-base">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Type de compte</span>
+              <span class="font-medium text-gray-900">
+                {% if account_type == constant('App\\Account\\Enum\\AccountType::CURRENT') %}
+                  Compte Courant
+                {% else %}
+                  Compte Épargne
+                {% endif %}
+              </span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Solde initial</span>
+              <span class="font-semibold text-red-600">100,00 €</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Statut</span>
+              <span class="font-medium text-red-600">Actif immédiatement</span>
+            </div>
+          </div>
+        </div>
+
+        <form method="POST" class="space-y-4">
+          <button type="submit" class="w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-xl shadow-sm text-lg font-bold text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200 transform hover:scale-[1.02]">
+            Confirmer et créer le compte
+            <svg xmlns="http://www.w3.org/2000/svg" class="ml-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <a href="{{ path('create_account') }}" class="w-full flex justify-center items-center py-4 px-6 border border-gray-300 rounded-xl shadow-sm text-lg font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-200">
+            ← Retour à la modification
+          </a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
