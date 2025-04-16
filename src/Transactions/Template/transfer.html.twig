@@ -20,6 +20,16 @@
         <span class="font-bold text-[#7B1E3A]">{{ account.balance|number_format(2, ',', ' ') }} €</span>
       </div>
     </div>
+{% if errors is defined and errors|length > 0 %}
+  <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+    <strong class="font-bold">Erreur(s) :</strong>
+    <ul class="mt-2 list-disc list-inside">
+      {% for error in errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
 
     {{ form_start(form, { 'attr': { 'class': 'space-y-6' } }) }}
 

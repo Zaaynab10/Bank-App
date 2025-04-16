@@ -15,11 +15,18 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class RegistrationController extends AbstractController
 {   
-
     #[Route('/register/customer', name: 'register_customer')]
+    public function registerCustomer(
+        Request $request, 
+        UserPasswordHasherInterface $userPasswordHasher, 
+        Security $security, 
+        EntityManagerInterface $entityManager
+    ): Response {
+        $user = $security->getUser();
+        if ($user && in_array('ROLE_CUSTOMER', $user->getRoles())) {
+            return $this->redirectToRoute('accounts');
+        }
 
-    public function registerCustomer(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
-    {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -42,9 +49,12 @@ class RegistrationController extends AbstractController
 
     #[Route('/register/admin', name: 'register_admin')]
     #[IsGranted('ROLE_ADMIN')]
-
-    public function registerAdmin(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
-    {
+    public function registerAdmin(
+        Request $request, 
+        UserPasswordHasherInterface $userPasswordHasher, 
+        Security $security, 
+        EntityManagerInterface $entityManager
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);

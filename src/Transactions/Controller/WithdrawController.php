@@ -19,59 +19,61 @@ final class WithdrawController extends AbstractController {
     #[Route('/withdraw', name: 'withdraw')]
     #[IsGranted('ROLE_CUSTOMER')]
     public function MakeWithdrawal(
-        Request                $request,
-        TransactionService     $transactionService,
+        Request $request,
+        TransactionService $transactionService,
         SessionInterface $session,
+        AccountRepository $accountRepository
+    ): Response {
+        $user = $this->getUser();
+        $errors = [];
 
-        AccountRepository      $accountRepository
-
-    ):Response {
-    $user = $this->getUser();
-
-    $bankAccountId = $session->get('bank_account_id');
-    if (!$bankAccountId) {
-        throw $this->createAccessDeniedException('No bank account selected in the session.');
-    }
-
-    $bankAccount = $accountRepository->find($bankAccountId);
-    if (!$bankAccount) {
-        throw $this->createAccessDeniedException('Bank account not found.');
-    }
-
-    if ($bankAccount->getOwner() !== $user) {
-        throw $this->createAccessDeniedException('You do not own this account.');
-    }
-
-    if (!$bankAccount->isActive()) {
-        throw new AccessDeniedException('Le compte source est inactif. Transaction refusée.');
-    }
-
-    $transaction = new Transaction();
-    $transaction->setSourceAccount($bankAccount); 
-
-    $form = $this->createForm(WithdrawForm::class, $transaction);
-
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $amount = $form->get('amount')->getData();
-
-        if (!$bankAccount->canWithdraw($amount)) {
-            throw $this->createAccessDeniedException('Withdrawal denied, insufficient funds or limit exceeded.');
+        $bankAccountId = $session->get('bank_account_id');
+        if (!$bankAccountId) {
+            $errors[] = 'Aucun compte sélectionné dans la session.';
         }
 
-        $transactionService->processTransaction($amount, $bankAccount, $bankAccount, TransactionType::WITHDRAWAL);
+        $bankAccount = $accountRepository->find($bankAccountId);
+        if (!$bankAccount) {
+            $errors[] = 'Compte introuvable.';
+        } elseif ($bankAccount->getOwner() !== $user) {
+            $errors[] = 'Vous n\'êtes pas propriétaire de ce compte.';
+        } elseif (!$bankAccount->isActive()) {
+            $errors[] = 'Le compte est inactif. Retrait refusé.';
+        }
 
-        return $this->redirectToRoute('account', [
-            'accountId' => $bankAccountId,
+        $transaction = new Transaction();
+        $transaction->setSourceAccount($bankAccount);
+
+        $form = $this->createForm(WithdrawForm::class, $transaction);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() && count($errors) === 0) {
+            $amount = $form->get('amount')->getData();
+
+            if (!$bankAccount->canWithdraw($amount)) {
+                $errors[] = 'Retrait refusé : fonds insuffisants ou limite dépassée.';
+            } else {
+                $transactionService->processTransaction(
+                    $amount,
+                    $bankAccount,
+                    $bankAccount,
+                    TransactionType::WITHDRAWAL
+                );
+
+                return $this->redirectToRoute('account', [
+                    'accountId' => $bankAccount->getId(),
+                ]);
+            }
+        }
+
+        return $this->render('@Transactions/withdraw.html.twig', [
+            'form' => $form->createView(),
+            'account' => $bankAccount,
+            'errors' => $errors
         ]);
     }
-    return $this->render('@Transactions/withdraw.html.twig', [
-        'form' => $form->createView(),
-        'account' => $bankAccount
-
-    ]);
 }
 
-}
+
+
 

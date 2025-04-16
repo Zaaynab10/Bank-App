@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
   <style>
     :root {
-      --primary-color: #8B1C2B; /
+      --primary-color: #8B1C2B;
       --accent-color: #ffc107;
       --light-bg: #f5f5f5;
       --dark-text: #212121;
@@ -118,6 +118,7 @@
     .intro-img img {
       width: 100%;
       border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
     
     .features-section {
@@ -144,10 +145,17 @@
       padding: 2rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       transition: transform 0.3s ease;
+      text-align: center;
     }
     
     .feature-card:hover {
       transform: translateY(-10px);
+    }
+    
+    .feature-card img {
+      max-height: 60px;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 5px 5px rgba(139, 28, 43, 0.2));
     }
     
     .testimonials-section {
@@ -203,7 +211,7 @@
   <header class="animate__animated animate__fadeInDown">
     <div class="logo">
       <a href="{{ path('homepage') }}">
-        <img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
+        <img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bash & Co">
       </a>
       <div class="header-slogan">Votre partenaire financier</div>
     </div>
@@ -221,7 +229,7 @@
       <a href="{{ path('register_customer') }}" class="btn">Démarrer maintenant</a>
     </article>
     <article class="intro-img">
-      <img src="banking-dashboard.svg" alt="Interface bancaire moderne">
+      <img src="https://images.unsplash.com/photo-1553729459-efe14ef6055d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" alt="Interface bancaire moderne">
     </article>
   </section>
 
@@ -229,17 +237,16 @@
     <h2>Nos solutions bancaires</h2>
     <div class="features">
       <div class="feature-card">
-        <img src="instant-transfer.svg" alt="Virements" style="height: 60px; margin-bottom: 1.5rem;">
+        <img src="https://cdn-icons-png.flaticon.com/512/10347/10347709.png" alt="Virements">
         <h3>Virements instantanés</h3>
         <p>Envoyez de l'argent en temps réel vers n'importe quelle banque en Europe.</p>
       </div>
+     <div class="feature-card">
+<img src="https://cdn-icons-png.flaticon.com/512/3132/3132699.png" alt="Épargne" style="height:60px;margin-bottom:1.5rem;">  <h3>Objectifs d'épargne</h3>
+  <p>Programmez des versements automatiques et suivez vos projets facilement.</p>
+</div>
       <div class="feature-card">
-        <img src="savings-goals.svg" alt="Épargne" style="height: 60px; margin-bottom: 1.5rem;">
-        <h3>Objectifs d'épargne</h3>
-        <p>Programmez des versements automatiques et suivez vos projets facilement.</p>
-      </div>
-      <div class="feature-card">
-        <img src="financial-analytics.svg" alt="Analyse" style="height: 60px; margin-bottom: 1.5rem;">
+        <img src="https://cdn-icons-png.flaticon.com/512/10347/10347725.png" alt="Analyse">
         <h3>Analyses intelligentes</h3>
         <p>Visualisez vos dépenses et recevez des recommandations personnalisées.</p>
       </div>
@@ -250,10 +257,12 @@
     <h2>Ils nous font confiance</h2>
     <div class="testimonials">
       <div class="testimonial">
+        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Sarah" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-bottom:1rem;">
         <p>"Enfin une banque qui comprend les besoins des indépendants !"</p>
         <p style="font-weight: 600; margin-top: 1rem;">- Sarah, Consultante digitale</p>
       </div>
       <div class="testimonial">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Marc" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-bottom:1rem;">
         <p>"L'interface est si intuitive que j'ai enfin pris le contrôle de mes finances."</p>
         <p style="font-weight: 600; margin-top: 1rem;">- Marc, Chef de projet</p>
       </div>

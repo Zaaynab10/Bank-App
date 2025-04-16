@@ -20,57 +20,59 @@ final class DepositController extends AbstractController {
     #[Route('/deposit', name: 'deposit')]
     #[IsGranted('ROLE_CUSTOMER')]
     public function MakeDeposit(
-        Request                $request,
+        Request $request,
         SessionInterface $session,
-        TransactionService     $transactionService,
-        AccountRepository      $accountRepository
-
+        TransactionService $transactionService,
+        AccountRepository $accountRepository
     ): Response {
-    $user = $this->getUser();
+        $user = $this->getUser();
+        $errors = [];
 
-    $bankAccountId = $session->get('bank_account_id');
-    $bankAccount = $accountRepository->find($bankAccountId);
+        $bankAccountId = $session->get('bank_account_id');
 
-    if (!$bankAccountId) {
-        throw $this->createAccessDeniedException('No bank account selected in the session.');
-    }
-    
-    
-    if (!$bankAccount) {
-        throw $this->createAccessDeniedException('Bank account not found.');
-    }
-
-    if ($bankAccount->getOwner() !== $user) {
-        throw $this->createAccessDeniedException('You do not own this account.');
-    }
-
-    if (!$bankAccount->isActive()) {
-        throw new AccessDeniedException('Le compte source est inactif. Transaction refusée.');
-    }
-
-    $transaction = new Transaction();
-    $transaction->setSourceAccount($bankAccount); 
-    $form = $this->createForm(DepositForm::class, $transaction);
-
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $amount = $form->get('amount')->getData();
-      
-        if (!$bankAccount->canDeposit($amount)) {
-            throw $this->createAccessDeniedException('Deposit denied, the deposit limit is 25,000.');
+        if (!$bankAccountId) {
+            $errors[] = 'Aucun compte sélectionné dans la session.';
         }
-       
 
-        $transactionService->processTransaction($amount, $bankAccount, $bankAccount, TransactionType::DEPOSIT);
+        $bankAccount = $accountRepository->find($bankAccountId);
 
-        return $this->redirectToRoute('account', [
-            'accountId' => $bankAccount->getId(),
+        if (!$bankAccount) {
+            $errors[] = 'Compte introuvable.';
+        } elseif ($bankAccount->getOwner() !== $user) {
+            $errors[] = 'Vous n\'êtes pas propriétaire de ce compte.';
+        } elseif (!$bankAccount->isActive()) {
+            $errors[] = 'Le compte est inactif. Dépôt refusé.';
+        }
+
+        $transaction = new Transaction();
+        $transaction->setSourceAccount($bankAccount);
+
+        $form = $this->createForm(DepositForm::class, $transaction);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() && count($errors) === 0) {
+            $amount = $form->get('amount')->getData();
+
+            if (!$bankAccount->canDeposit($amount)) {
+                $errors[] = 'Dépôt refusé : la limite de dépôt de 25 000 € a été dépassée.';
+            } else {
+                $transactionService->processTransaction(
+                    $amount,
+                    $bankAccount,
+                    $bankAccount,
+                    TransactionType::DEPOSIT
+                );
+
+                return $this->redirectToRoute('account', [
+                    'accountId' => $bankAccount->getId(),
+                ]);
+            }
+        }
+
+        return $this->render('@Transactions/deposit.html.twig', [
+            'form' => $form->createView(),
+            'account' => $bankAccount,
+            'errors' => $errors
         ]);
     }
-    return $this->render('@Transactions/deposit.html.twig', [
-        'form' => $form->createView(),
-        'account' => $bankAccount
-    ]);
-}
 }
