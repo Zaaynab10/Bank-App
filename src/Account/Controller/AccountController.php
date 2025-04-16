@@ -27,6 +27,8 @@ final class AccountController extends AbstractController
     }
 
     #[Route('/create', name: 'create_account', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_CUSTOMER')]
+
 public function create(Request $request, EntityManagerInterface $entityManager, AccountRepository $accountRepository): Response
 {
     $accounts = $accountRepository->findBy(['owner' => $this->getUser()]);
@@ -61,6 +63,8 @@ public function create(Request $request, EntityManagerInterface $entityManager, 
 }
 
 #[Route('/confirm', name: 'confirm_account', methods: ['GET', 'POST'])]
+#[IsGranted('ROLE_CUSTOMER')]
+
 public function confirm(Request $request, EntityManagerInterface $entityManager, AccountRepository $accountRepository): Response
 {
     $accountData = $request->getSession()->get('new_account_data');
