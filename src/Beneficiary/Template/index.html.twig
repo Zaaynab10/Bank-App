@@ -1,19 +1,50 @@
 {% extends 'base-client.html.twig' %}
 
-{% block title %}Ajouter un bénéficiaire{% endblock %}
+{% block title %}Ajouter un bénéficiaire
+{% endblock %}
 
 {% block main %}
-  <h1>Ajouter un bénéficiaire</h1>
+	<style>
+		h1 {
+			font-size: 32px;
+			margin: 0 0 1vw 1.5vw;
+		}
 
-  {% for message in app.flashes('error') %}
-    <div class="alert alert-danger">{{ message }}</div>
-  {% endfor %}
-  {% for message in app.flashes('success') %}
-    <div class="alert alert-success">{{ message }}</div>
-  {% endfor %}
+		form {
+			margin-left: 2.5vw;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			padding: 2vw 0 2vw 1.5vw;
+			border-radius: 20px;
+			min-height: 350px;
+			width: 50%;
 
-  {{ form_start(form) }}
-  {{ form_widget(form) }}
-  <button type="submit">Ajouter</button>
-  {{ form_end(form) }}
+			div:not(div:nth-child(2)) {
+				padding-bottom: 1.5vw;
+			}
+		}
+
+		label {
+			font-size: 20px;
+			margin-right: 2.5vh;
+		}
+
+		input {
+			padding: 2px 0 2px 5px;
+			border: 1px solid black;
+			border-radius: 6px;
+		}
+	</style>
+	<h1>Ajouter un bénéficiaire</h1>
+
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger">{{ message }}</div>
+	{% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success">{{ message }}</div>
+	{% endfor %}
+
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	<button type="submit" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">Ajouter</button>
+	{{ form_end(form) }}
 {% endblock %}
