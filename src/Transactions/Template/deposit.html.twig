@@ -3,25 +3,77 @@
 {% block title %}Faire un dépôt{% endblock %}
 
 {% block main %}
-  <div class="max-w-lg mx-auto bg-white p-8 mt-10 rounded-lg shadow-md">
-    <h1 class="text-2xl font-semibold text-center text-gray-700 mb-6">Déposer des fonds</h1>
+  <div class="max-w-4xl mx-auto bg-white px-10 py-6 mt-6 rounded-xl shadow-md border border-[#7B1E3A]">
+    <div class="text-center mb-6">
+      <div class="mx-auto w-16 h-16 bg-[#FDE8EC] rounded-full flex items-center justify-center mb-3">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#7B1E3A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h1 class="text-2xl font-bold text-[#7B1E3A]">Déposer des fonds</h1>
+      <p class="text-gray-600 text-sm mt-1">Compte n°{{ account.accountNumber }}</p>
+    </div>
 
-    <form method="post" class="space-y-6">
+    <div class="bg-gray-100 p-3 rounded-lg mb-4 border-l-4 border-[#7B1E3A]">
+      <div class="flex justify-between items-center">
+        <span class="text-gray-700 text-sm font-medium">Solde actuel</span>
+        <span class="font-bold text-[#7B1E3A]">{{ account.balance|number_format(2, ',', ' ') }} €</span>
+      </div>
+    </div>
+
+    <form method="post" class="space-y-4">
       {{ form_start(form) }}
 
-      <p>Compte sélectionné : {{ app.session.get('bank_account_id') }}</p>
-
       <div>
-        {{ form_label(form.amount, null, { 'label_attr': { 'class': 'block text-gray-600 font-medium mb-2' } }) }}
-        {{ form_widget(form.amount, { 'attr': { 'class': 'w-full p-3 border rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none' } }) }}
+        {{ form_label(form.amount, 'Montant à déposer', { 'label_attr': { 'class': 'block text-sm font-semibold text-[#7B1E3A] mb-1' } }) }}
+        <div class="relative mt-1">
+          {{ form_widget(form.amount, { 
+            'attr': { 
+              'class': 'block w-full pl-4 pr-12 py-2 border border-[#7B1E3A] rounded-md shadow-sm focus:ring-[#7B1E3A] focus:border-[#7B1E3A]',
+              'placeholder': '0,00',
+              'oninput': 'updateBalancePreview(this.value)'
+            } 
+          }) }}
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+            <span class="text-[#7B1E3A] font-bold">€</span>
+          </div>
+        </div>
       </div>
 
-      <button type="submit"
-              class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-md transition">
-        Déposer
+      <div id="balance-preview" class="hidden bg-[#FDE8EC] p-2 rounded-md border border-[#7B1E3A]">
+        <div class="flex justify-between text-sm">
+          <span class="text-[#7B1E3A] font-medium">Nouveau solde :</span>
+          <span class="font-bold text-[#7B1E3A]" id="new-balance">{{ account.balance|number_format(2, ',', ' ') }} €</span>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full bg-[#7B1E3A] hover:bg-[#65152F] text-white font-bold py-2 px-4 rounded-md shadow transition">
+        Confirmer le dépôt
       </button>
 
       {{ form_end(form) }}
     </form>
   </div>
+
+  <script>
+    function updateBalancePreview(value) {
+      const previewDiv = document.getElementById('balance-preview');
+      const newBalanceSpan = document.getElementById('new-balance');
+      
+      if (value && parseFloat(value) > 0) {
+        const currentBalance = {{ account.balance }};
+        const depositAmount = parseFloat(value) || 0;
+        const newBalance = currentBalance + depositAmount;
+        
+        newBalanceSpan.textContent = newBalance.toLocaleString('fr-FR', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }) + ' €';
+        
+        previewDiv.classList.remove('hidden');
+      } else {
+        previewDiv.classList.add('hidden');
+      }
+    }
+  </script>
 {% endblock %}

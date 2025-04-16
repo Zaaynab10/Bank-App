@@ -68,6 +68,8 @@ final class WithdrawController extends AbstractController {
     }
     return $this->render('@Transactions/withdraw.html.twig', [
         'form' => $form->createView(),
+        'account' => $bankAccount
+
     ]);
 }
 

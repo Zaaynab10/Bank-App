@@ -67,6 +67,7 @@ final class DepositController extends AbstractController {
     }
     return $this->render('@Transactions/deposit.html.twig', [
         'form' => $form->createView(),
+        'account' => $bankAccount
     ]);
 }
 }
