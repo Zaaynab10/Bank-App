@@ -3,50 +3,126 @@
 {% block title %}Transactions{% endblock %}
 
 {% block main %}
-  <!-- Onglets (Withdraw, Deposit, Transfer) -->
-  <div class="flex justify-center space-x-4">
-    <a href="{{ path('withdraw') }}"
-       class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded-md transition">Retrait</a>
-    <a href="{{ path('deposit') }}"
-       class="bg-green-500 hover:bg-green-700 text-white px-6 py-2 rounded-md transition">Dépôt</a>
-    <a href="{{ path('transfer') }}"
-       class="bg-yellow-500 hover:bg-yellow-700 text-white px-6 py-2 rounded-md transition">Virement</a>
-    <a href="{{ path('account_stats', { accountId: accountId }) }}"
-       class="bg-purple-500 hover:bg-purple-700 text-white px-6 py-2 rounded-md transition">Statistiques</a>
+  <div class="bg-gradient-to-r from-[#800000] to-[#B22222] rounded-2xl p-6 mb-8 backdrop-blur-lg shadow-xl">
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="{{ path('withdraw') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+        <span>Retrait</span>
+      </a>
+      <a href="{{ path('deposit') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        <span>Dépôt</span>
+      </a>
+      <a href="{{ path('transfer') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+        <span>Virement</span>
+      </a>
+      <a href="{{ path('account_stats', { accountId: accountId }) }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        <span>Analytiques</span>
+      </a>
+    </div>
   </div>
 
-  <!-- Liste des transactions -->
-  <h3 class="text-2xl font-semibold text-gray-800">Historique des Transactions</h3>
-
-  <div class="bg-white shadow-md rounded-lg p-6">
-    <ul class="divide-y divide-gray-200">
-      {% for transaction in transactions %}
-        <li class="py-4 flex justify-between items-center">
-          <div>
-            <span class="text-gray-500">{{ transaction.dateTime|date('d/m/Y H:i') }}</span>
-            <span class="font-semibold ml-2">{{ transaction.type.value }}</span>
+  <div class="space-y-6" id="transaction-list">
+    <h3 class="text-3xl font-bold text-gray-900 mb-6">Activité récente</h3>
+    
+    {% for transaction in transactions %}
+      <div class="transaction-item group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-l-4 
+        {% if transaction.type.value == 'withdraw' %}border-[#800000]{% elseif transaction.type.value == 'transfer' %}border-yellow-400{% else %}border-teal-400{% endif %}">
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <div class="p-3 rounded-xl bg-gradient-to-br 
+              {% if transaction.type.value == 'withdraw' %}from-[#800000] to-[#6A0000]{% elseif transaction.type.value == 'transfer' %}from-yellow-100 to-yellow-50{% else %}from-teal-100 to-teal-50{% endif %}">
+              {% if transaction.type.value == 'withdraw' %}
+                <svg class="w-6 h-6 text-[#800000]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              {% elseif transaction.type.value == 'deposit' %}
+                <svg class="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              {% elseif transaction.type.value == 'transfer' %}
+                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+              {% endif %}
+            </div>
+            <div>
+              <div class="text-lg font-semibold text-gray-900">{{ transaction.type.value|capitalize }}</div>
+              <div class="text-sm text-gray-500">{{ transaction.dateTime|date('d M Y, H:i') }}</div>
+            </div>
           </div>
-          <div
-              class="text-lg font-bold {% if transaction.amount < 0 %}text-red-500{% else %}text-green-500{% endif %}">
-            {{ transaction.amount|number_format(2, ',', ' ') }} €
+          
+          <div class="text-right">
+            <div class="text-xl font-bold 
+              {% if transaction.type.value == 'withdraw' %}text-[#800000]{% elseif transaction.type.value == 'transfer' %}text-yellow-600{% else %}text-teal-600{% endif %}">
+              {{ transaction.amount|number_format(2, ',', ' ') }} €
+            </div>
+            <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full 
+              {% if transaction.status.value == 'validée' %}bg-green-100 text-green-700{% else %}bg-gray-100 text-gray-700{% endif %}">
+              {{ transaction.status.value|upper }}
+            </span>
           </div>
-          <span
-              class="px-3 py-1 rounded-md text-white text-sm {% if transaction.status.value == 'validée' %}bg-green-500{% else %}bg-gray-500{% endif %}">
-                                {{ transaction.status.value }}
-                            </span>
-        </li>
-      {% else %}
-        <li class="text-center text-gray-500 py-6">Aucune transaction trouvée.</li>
-      {% endfor %}
-    </ul>
+        </div>
+      </div>
+    {% else %}
+      <div class="text-center py-12">
+        <div class="mb-4 text-gray-400">
+          <svg class="w-24 h-24 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+        </div>
+        <p class="text-gray-500">Aucune activité récente</p>
+      </div>
+    {% endfor %}
   </div>
 
-  <!-- Pagination -->
-  <div class="flex justify-between items-center mt-6">
-    <button class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md transition" id="prev-page">Précédent
+  <div class="mt-8 flex items-center justify-center space-x-4">
+    <button id="prev-page" class="p-2 rounded-full hover:bg-gray-50 transition-colors" onclick="changePage('prev')">
+      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
     </button>
-    <span id="page-info" class="text-gray-700">Page 1</span>
-    <button class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded-md transition" id="next-page">Suivant</button>
+    <span id="page-info" class="px-4 py-1 bg-gray-100 rounded-full text-sm font-medium text-gray-600">Page 1</span>
+    <button id="next-page" class="p-2 rounded-full hover:bg-gray-50 transition-colors" onclick="changePage('next')">
+      <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
   </div>
+
+  <script>
+    let currentPage = 1;
+    const transactionsPerPage = 5;
+
+    function changePage(direction) {
+      const transactionItems = document.querySelectorAll('.transaction-item');
+      const totalPages = Math.ceil(transactionItems.length / transactionsPerPage);
+
+      if (direction === 'next' && currentPage < totalPages) {
+        currentPage++;
+      } else if (direction === 'prev' && currentPage > 1) {
+        currentPage--;
+      }
+
+      document.getElementById('page-info').textContent = `Page ${currentPage}`;
+      loadTransactions();
+    }
+
+    function loadTransactions() {
+      const transactionItems = document.querySelectorAll('.transaction-item');
+      transactionItems.forEach((item, index) => {
+        if (index >= (currentPage - 1) * transactionsPerPage && index < currentPage * transactionsPerPage) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    loadTransactions();  
+  </script>
 
 {% endblock %}

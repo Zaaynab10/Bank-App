@@ -1,9 +1,17 @@
 <header class="bg-green-700 text-white p-4 shadow-md">
   <div class="container mx-auto flex justify-between items-center">
-    <div class="flex items-center gap-8">
-      <a href="{{ path('accounts') }}" class="text-lg font-semibold">Mes Comptes</a>
-      <a href="{{ path('list_beneficiaries') }}" class="text-lg font-semibold">Bénéficiaires</a>
+    
+    <div class="flex items-center gap-4">
+      <a href="{{ path('accounts') }}" class="flex items-center gap-2">
+        <img src="{{ asset('images/logo-clair.png') }}" alt="Logo Banque" class="h-10">
+      </a>
     </div>
+
+    <div class="flex items-center gap-8">
+      <a href="{{ path('accounts') }}" class="text-lg font-semibold hover:underline">Mes Comptes</a>
+      <a href="{{ path('list_beneficiaries') }}" class="text-lg font-semibold hover:underline">Bénéficiaires</a>
+    </div>
+
     <div class="flex items-center space-x-4">
       <a href="{{ path('logout') }}" class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">Déconnexion</a>
       <img src="{{ asset('images/profile-placeholder.png') }}" alt="Photo de profil" class="w-10 h-10 rounded-full border-2 border-white">

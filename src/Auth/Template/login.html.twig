@@ -1,69 +1,185 @@
-{% extends 'base.html.twig' %}
 
-{% block title %}Connexion
+{% block head %}
+  <style>
+    :root {
+      --primary-color: #8B1C2B;
+      --accent-color: #ffc107;
+      --light-bg: #f5f5f5;
+      --dark-text: #212121;
+      --overlay-bg: rgba(0, 0, 0, 0.5);
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      overflow: hidden;
+    }
+    
+    .login-page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 1;
+    }
+    
+    .background-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    
+    .logo {
+      position: absolute;
+      top: 2%;
+      left: 5%;
+      display: flex;
+      align-items: center;
+    }
+    
+    .bank-logo {
+      max-height: 45px;
+    }
+    
+    .welcome-title {
+      color: var(--primary-color);
+      font-size: 2.5rem;
+      margin: 3rem auto 2rem auto;
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .form-div {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+      margin: 2rem auto;
+    }
+    
+    .login-form .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .login-form .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #212121;
+    }
+    
+    .login-form .form-group input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    .login-form button.btn {
+      display: block;
+      width: fit-content;
+      margin: 1rem auto;
+      background: var(--primary-color);
+      border: none;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .login-form button.btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .footer-links {
+      margin-top: 0.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    .footer-links a {
+      color: var(--primary-color);
+      margin: 0 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .welcome-title {
+        font-size: 2rem;
+      }
+    
+      .bank-logo {
+        max-height: 40px;
+      }
+    
+      .form-div {
+        margin: 2rem auto;
+      }
+    }
+  </style>
 {% endblock %}
 
 {% block main %}
-	<div
-		class="login-page">
-		<!-- Video Background -->
-		<video autoplay loop muted playsinline class="background-video">
-			<source src="{{ asset('videos/light-background.mp4') }}" type="video/mp4">
-			Your browser does not support the video tag.
-		</video>
-
-		<!-- Logo -->
-		<div class="logo">
-			<a href="{{ path('homepage') }}">
-				<img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
-			</a>
-		</div>
-
-		<!-- Dark Mode Switch -->
-		<div class="dark-mode-switch">
-			<img id="themeIcon" src="{{ asset('images/sun.svg') }}" alt="Theme Icon"/>
-		</div>
-
-		<!-- Titre -->
-		<h1 class="welcome-title">Nous sommes ravis de vous revoir !</h1>
-
-		<!-- Formulaire de connexion -->
-		<div class="form-div">
-			<form method="post" action="{{ path('login') }}" class="login-form">
-				{% if error %}
-					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-				{% endif %}
-
-				<div class="form-group">
-					<label for="email">Email</label>
-					<input type="text" name="email" id="email" value="{{ last_username }}" required autofocus>
-				</div>
-
-				<div class="form-group">
-					<label for="password">Password</label>
-					<input type="password" name="password" id="password" required>
-				</div>
-
-				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-				<button class="btn btn-green" type="submit">
-					<img src="{{ asset('images/arrow-circle-right.svg') }}" alt="Right Arrow">
-				</button>
-			</form>
-		</div>
-
-
-		<!-- Footer Links -->
-		<div class="footer-links">
-			<a href="{{ path('register_admin') }}">Vous n'avez pas de compte ? S'identifier en tant qu'Admin</a>
-			|
-			<a href="{{ path('register_customer') }}">Vous n'avez pas de compte ? S'identifier en tant que Client</a>
-		</div>
-
-		<div class="footer-links">
-			<a href="#">Terms of Use</a>
-			|
-			<a href="#">Privacy Policy</a>
-		</div>
-	</div>
+  <div class="login-page">
+    <video autoplay loop muted playsinline class="background-video">
+      <source src="https://coverr.co/s3/mp4/Kkltvw8ZY6mopCAabPdDxwXPZ5B2ZkPF.mp4" type="video/mp4">
+      <!-- Fallback pour les navigateurs qui ne supportent pas la vidéo -->
+      Votre navigateur ne supporte pas l'élément vidéo.
+    </video>
+    
+    <div class="logo">
+      <a href="{{ path('homepage') }}">
+        <img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
+      </a>
+    </div>
+    
+    <h1 class="welcome-title">Nous sommes ravis de vous revoir !</h1>
+    
+    <div class="form-div">
+      <form method="post" action="{{ path('login') }}" class="login-form">
+        {% if error %}
+          <div class="alert alert-danger">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+          </div>
+        {% endif %}
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" name="email" id="email" value="{{ last_username }}" required autofocus>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <input type="password" name="password" id="password" required>
+        </div>
+        
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        
+        <button class="btn" type="submit">Connexion</button>
+      </form>
+    </div>
+    
+    <div class="footer-links">
+      <a href="{{ path('register_admin') }}">S'inscrire en tant qu'Admin</a>
+      |
+      <a href="{{ path('register_customer') }}">S'inscrire en tant que Client</a>
+    </div>
+    
+    <div class="footer-links">
+      <a href="#">Terms of Use</a>
+      |
+      <a href="#">Privacy Policy</a>
+    </div>
+  </div>
 {% endblock %}

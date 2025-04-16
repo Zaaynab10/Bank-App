@@ -30,7 +30,8 @@ final class TransferController extends AbstractController
 
     ): Response {
         $user = $this->getUser();
-        
+        $bankAccountId = $session->get('bank_account_id');
+
         $bankAccounts = $bankAccountRepository->findBy(['owner' => $user]);
 
         $beneficiaries = $entityManager->getRepository(Beneficiary::class)->findBy(['member' => $user]);
@@ -44,9 +45,9 @@ final class TransferController extends AbstractController
         ]);
 
         $form->handleRequest($request);
+        $sourceAccount =$bankAccountRepository->find($bankAccountId) ;
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $sourceAccount =$bankAccountRepository->find( $session->get('bank_account_id')) ;
             $destinationAccountNumber = $form->get('destination_account_number')->getData()->getBankAccountNumber();
             $amount = $form->get('amount')->getData();
 
@@ -86,6 +87,8 @@ final class TransferController extends AbstractController
 
         return $this->render('@Transactions/transfer.html.twig', [
             'form' => $form->createView(),
+            'account'=>$sourceAccount
+
         ]);
     }
 }
