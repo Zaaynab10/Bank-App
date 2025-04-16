@@ -1,53 +1,211 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sign Up
+{% block title %}Créer un compte{% endblock %}
+
+{% block stylesheets %}
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #8B1C2B;
+      --accent-color: #ffc107;
+      --light-bg: #f5f5f5;
+      --dark-text: #212121;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      overflow: hidden;
+    }
+
+    .register-page {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      z-index: 1;
+      padding-top: 10px; 
+    }
+
+    .background-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .logo {
+      position: absolute;
+      top: 2%;
+      left: 5%;
+      display: flex;
+      align-items: center;
+    }
+
+    .bank-logo {
+      max-height: 45px;
+    }
+
+    .welcome-title {
+      color: var(--primary-color);
+      font-size: 2.2rem; 
+      margin: 0.5rem 1rem 1.5rem 1.5rem;
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .register-form {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 1rem;
+      border-radius: 8px; /
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      width: 100%; 
+      max-width: 400px; 
+      margin: 0 auto;
+      animation: fadeInUp 1s ease-in-out;
+    }
+
+    .register-form .form-group {
+      margin-bottom: 0.5rem; 
+    }
+
+    .register-form .form-group label {
+      display: block;
+      margin-bottom: 0.1rem; 
+      color: #212121;
+    }
+
+    .register-form .form-group input {
+      width: 100%;
+      padding: 0.4rem; 
+      border: 1px solid #ccc;
+      border-radius: 4px; 
+      font-size: 0.9rem; 
+      margin: 0 auto;
+    }
+
+    .register-form button.btn {
+      display: block;
+      width: fit-content;
+      margin: 1rem auto;
+      background: var(--primary-color);
+      border: none;
+      color: white;
+      padding: 0.4rem 1rem; 
+      border-radius: 25px; 
+      font-size: 1rem; 
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      animation: bounceIn 1s;
+    }
+
+    .register-form button.btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .footer-links {
+      margin-top: 0.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .footer-links a {
+      color: var(--primary-color);
+      margin: 0 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .welcome-title {
+        font-size: 1rem;
+      }
+
+      .bank-logo {
+        max-height: 40px;
+      }
+
+      .register-form {
+        width: 90%;
+        max-width: 350px; 
+      }
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      70% {
+        transform: scale(0.95);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
 {% endblock %}
 
 {% block main %}
-	<div
-		class="register-page">
-		<!-- Video Background -->
-		<video autoplay loop muted playsinline class="background-video">
-			<source src="{{ asset('videos/light-background.mp4') }}" type="video/mp4">
-			Your browser does not support the video tag.
-		</video>
+  <div class="register-page">
+ 
 
-		<!-- Logo -->
-		<div class="logo">
-			<a href="{{ path('homepage') }}">
-				<img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
-			</a>
-		</div>
+    <div class="logo">
+      <a href="{{ path('homepage') }}">
+        <img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
+      </a>
+    </div>
 
-		<!-- Dark Mode Switch -->
-		<div class="dark-mode-switch">
-			<img id="themeIcon" src="{{ asset('images/sun.svg') }}" alt="Theme Icon"/>
-		</div>
+    <h1 class="welcome-title">Bienvenue, Créez votre compte</h1>
 
-		<!-- Title -->
-		<h1 class="welcome-title">Welcome, Create Your Account</h1>
+    {{ form_start(registrationForm, { 'attr': { 'class': 'register-form' }, 'method': 'post' }) }}
+    
+    <div class="form-group">
+      {{ form_row(registrationForm.firstName, { 'label': 'Prénom', 'attr': { 'placeholder': 'Entrez votre prénom' } }) }}
+    </div>
+    <div class="form-group">
+      {{ form_row(registrationForm.lastName, { 'label': 'Nom', 'attr': { 'placeholder': 'Entrez votre nom' } }) }}
+    </div>
+    <div class="form-group">
+      {{ form_row(registrationForm.email, { 'label': 'E-mail', 'attr': { 'placeholder': 'Entrez votre e-mail' } }) }}
+    </div>
+    <div class="form-group">
+      {{ form_row(registrationForm.plainPassword, { 'label': 'Mot de passe', 'attr': { 'placeholder': 'Entrez votre mot de passe' } }) }}
+    </div>
+    <div class="form-group">
+      {{ form_row(registrationForm.phone, { 'label': 'Numéro de téléphone', 'attr': { 'placeholder': 'Entrez votre numéro de téléphone' } }) }}
+    </div>
 
-		<!-- Registration Form -->
-		{{ form_start(registrationForm, { 'attr': { 'class': 'register-form' }, 'method': 'post' }) }}
-		{{ form_row(registrationForm.firstName, { 'label': 'First Name' }) }}
-		{{ form_row(registrationForm.lastName, { 'label': 'Last Name' }) }}
-		{{ form_row(registrationForm.email, { 'label': 'Email' }) }}
-		{{ form_row(registrationForm.plainPassword, { 'label': 'Password' }) }}
-		{{ form_row(registrationForm.phone, { 'label': 'Phone Number' }) }}
+    <button class="btn" type="submit">S'inscrire</button>
+    {{ form_end(registrationForm) }}
 
-		<button class="btn btn-green" type="submit">
-			<img src="{{ asset('images/arrow-circle-right.svg') }}" alt="Right Arrow">
-		</button>
-		{{ form_end(registrationForm) }}
-
-		<!-- Footer Links -->
-		<div class="footer-links">
-			<a href="{{ path('login') }}">Already have an account? Log in</a>
-		</div>
-		<div class="footer-links">
-			<a href="#">Terms of Use</a>
-			|
-			<a href="#">Privacy Policy</a>
-		</div>
-	</div>
+    <div class="footer-links">
+      <a href="{{ path('login') }}">Vous avez déjà un compte ? Connectez-vous</a>
+    </div>
+    <div class="footer-links">
+      <a href="#">Conditions d'utilisation</a>
+      |
+      <a href="#">Politique de confidentialité</a>
+    </div>
+  </div>
 {% endblock %}

@@ -1,373 +1,271 @@
 <head>
-	<meta charset="UTF-8">
-	<title>
-		{% block title %}Accueil
-		{% endblock %}
-	</title>
-	<style>
-		* {
-			font-family: Arial, sans-serif;
-			margin: 0;
-			padding: 0;
-			text-decoration: none;
-			scroll-behavior: smooth;
-		}
-
-		.intro-section,
-		.features-section,
-		.accompany-section,
-		.testimonials-section {
-			h2 {
-				font-size: 32px;
-				text-align: left;
-			}
-
-			span:not(.testimonial span) {
-				text-decoration: underline;
-				text-underline-offset: 4px;
-			}
-		}
-
-		.welcome-section {
-			display: flex;
-			flex-flow: row wrap;
-			justify-content: space-between;
-			align-items: center;
-			color: white;
-			background-color: #1F5E00;
-
-			a {
-				color: white;
-			}
-		}
-
-		.website-logo {
-			margin-left: 1.5vw;
-		}
-
-		.cta-buttons .btn,
-		.intro-description .btn,
-		.accompany-description .btn {
-			display: inline-block;
-			background-color: #1F5E00;
-			color: white;
-			padding: 10px 20px;
-			border-radius: 5px;
-			text-decoration: none;
-			margin: 10px;
-			transition: background-color 0.3s ease;
-		}
-
-		.cta-buttons .btn:hover,
-		.intro-description .btn:hover,
-		.accompany-description .btn:hover {
-			background-color: rgb(109, 199, 64);
-			scale: 105%;
-		}
-
-		.intro-section {
-			width: 95%;
-			margin: auto;
-			padding: 4vw 0;
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-
-			.btn {
-				margin-left: 0;
-			}
-
-			h2 {
-				margin-bottom: 2vw;
-			}
-
-			p {
-				margin-bottom: 1vw;
-			}
-		}
-
-		.intro-description {
-			width: 50%;
-		}
-
-		.intro-lorem p {
-			font-size: 16px;
-		}
-
-		.features {
-			display: flex;
-			justify-content: center;
-			flex-wrap: wrap;
-			gap: 30px;
-		}
-
-		.feature-card {
-			width: calc(25% - 30px);
-			perspective: 1000px;
-		}
-
-		.card-inner {
-			position: relative;
-			width: 80%;
-			padding-top: 100%; /* carré */
-			transform-style: preserve-3d;
-			transition: transform 0.8s;
-		}
-
-		.feature-card:hover .card-inner {
-			transform: rotateY(180deg);
-		}
-
-		.card-front,
-		.card-back {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 90%;
-			height: 90%;
-			border-radius: 10px;
-			backface-visibility: hidden; /*
-    background: linear-gradient(180deg, #b6b6b6 0%, #cfd3f2 100%); */
-			background-color: #ffffff;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			padding: 30px;
-			box-shadow: 1px 6px 8px rgba(0, 0, 0, 0.1);
-		}
-
-		.card-front img {
-			width: 60px;
-			margin-bottom: 15px;
-		}
-
-		.card-front h3 {
-			font-size: 1.2rem;
-			color: #2c3e50;
-		}
-
-		.card-back {
-			transform: rotateY(180deg);
-			font-size: 1rem;
-			color: #333;
-			background-color: #ffffff;
-		}
-
-		.accompany-section {
-			width: 95%;
-			margin: 8vw auto;
-
-			h2 {
-				text-align: center;
-				width: 80%;
-				margin: 0 auto 4vw;
-			}
-
-			.btn {
-				margin-left: 0;
-			}
-		}
-
-		.accompany-content {
-			display: flex;
-			flex-flow: row wrap;
-			justify-content: space-between;
-		}
-
-		.accompany-description {
-			width: 50%;
-
-			strong p {
-				padding-bottom: 2.5vw;
-			}
-
-			p {
-				padding-bottom: 1vw;
-			}
-		}
-
-		.testimonials-section {
-			background-color: #f1f1f1;
-			padding: 50px 20px;
-			text-align: center;
-
-			h2 {
-				text-align: center;
-				width: 80%;
-				margin: 0 auto 4vw;
-			}
-		}
-
-		.testimonials {
-			display: flex;
-			justify-content: space-around;
-			flex-wrap: wrap;
-		}
-
-		.testimonial {
-			width: 45%;
-			margin: 20px 0;
-			padding: 20px;
-			background-color: white;
-			border-radius: 5px;
-			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		}
-
-		.testimonial p {
-			font-style: italic;
-			margin-bottom: 10px;
-		}
-
-		.testimonial span {
-			font-weight: bold;
-		}
-
-		.website-footer {
-			padding: 1vw 0;
-			text-align: center;
-			background-color: #1F5E00;
-			color: white;
-		}
-	</style>
+  <meta charset="UTF-8">
+  <title>{% block title %}Bash & Co - Votre banque{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    :root {
+      --primary-color: #8B1C2B; /* Rouge bordeaux profond */
+      --accent-color: #ffc107;
+      --light-bg: #f5f5f5;
+      --dark-text: #212121;
+    }
+    
+    * {
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      transition: background 0.3s, color 0.3s;
+    }
+    
+    body {
+      background: var(--light-bg);
+      color: var(--dark-text);
+    }
+    
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    /* HEADER */
+    header {
+      background: var(--primary-color);
+      color: white;
+      padding: 1.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Logo et slogan */
+    .logo {
+      display: flex;
+      align-items: center;
+    }
+    
+    .bank-logo {
+      max-height: 50px; /* Réduction de la taille du logo */
+    }
+    
+    /* Slogan dans le header pour combler l'espace vide */
+    .header-slogan {
+      font-size: 1.2rem;
+      margin: 0 2rem;
+      font-style: italic;
+    }
+    
+    /* Boutons de connexion / inscription */
+    .cta-buttons {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .cta-buttons .btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.5rem 1.2rem;  /* Taille légèrement réduite */
+      font-size: 1.1rem;
+      border-radius: 30px;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .cta-buttons .btn:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.05);
+    }
+    
+    /* Reste du style inchangé */
+    .intro-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 5rem auto;
+      padding: 0 5%;
+      align-items: center;
+    }
+    
+    .intro-description h2 {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+    
+    .intro-description p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+    
+    .intro-description .btn {
+      background: var(--primary-color);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    
+    .intro-description .btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .intro-img img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    
+    .features-section {
+      background: white;
+      padding: 6rem 5%;
+    }
+    
+    .features-section h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 4rem;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    
+    .feature-card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+    
+    .testimonials-section {
+      background: var(--light-bg);
+      padding: 6rem 5%;
+    }
+    
+    .testimonials-section h2 {
+      text-align: center;
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 4rem;
+    }
+    
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .testimonial {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    footer {
+      background: var(--primary-color);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    @media (max-width: 768px) {
+      .intro-section {
+        grid-template-columns: 1fr;
+      }
+      
+      .features {
+        grid-template-columns: 1fr;
+      }
+      
+      .header-slogan {
+        display: none;
+      }
+    }
+  </style>
 </head>
 
 {% block body %}
-	<div
-		class="homepage">
-		<!--
-												<video autoplay loop muted playsinline class="background-video">
-													<source src="{{ asset('videos/light-background.mp4') }}" type="video/mp4">
-													Your browser does not support the video tag.
-												</video> -->
+<div class="homepage">
+  <header class="animate__animated animate__fadeInDown">
+    <div class="logo">
+      <a href="{{ path('homepage') }}">
+        <img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
+      </a>
+      <div class="header-slogan">Votre partenaire financier</div>
+    </div>
+    <div class="cta-buttons">
+      <a href="{{ path('login') }}" class="btn">Connexion</a>
+      <a href="{{ path('register_customer') }}" class="btn">Ouvrir un compte</a>
+    </div>
+  </header>
 
-		<header class="welcome-section">
-			<a href="" class="website-logo">
-				<img src="" alt="">
-				<h1>Logo.</h1>
-			</a>
-			<!--<h1>Bienvenue sur votre banque en ligne</h1>
-									<p>Gérez vos finances en toute simplicité, rapidité et sécurité.</p>-->
-			<div class="cta-buttons">
-				<a href="{{ path('login') }}" class="btn">Se connecter</a>
-				<a href="{{ path('register_customer') }}" class="btn btn-alt">Devenir client</a>
-				<a href="{{ path('register_admin') }}" class="btn btn-alt">Devenir admin</a>
-			</div>
-		</header>
+  <!-- Reste du contenu de la homepage (intro, features, testimonials, footer) inchangé -->
+  <section class="intro-section animate__animated animate__fadeInUp animate__slow">
+    <article class="intro-description">
+      <h2>Votre liberté financière commence ici</h2>
+      <p>Bash & Co redéfinit la gestion bancaire avec des solutions innovantes et sécurisées. Accédez à vos comptes 24h/24, gérez vos finances en temps réel et bénéficiez de conseils personnalisés.</p>
+      <p>Notre engagement : transparence, outils intelligents et accompagnement sur mesure.</p>
+      <a href="{{ path('register_customer') }}" class="btn">Démarrer maintenant</a>
+    </article>
+    <article class="intro-img">
+      <img src="banking-dashboard.svg" alt="Interface bancaire moderne">
+    </article>
+  </section>
 
-		<section class="intro-section">
-			<article class="intro-description">
-				<h2>Les efforts finissent toujours par
-					<span>payer</span>
-				</h2>
-				<div class="intro-lorem">
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla fugit earum dolores soluta itaque iste vel minus suscipit consequuntur optio fuga amet unde ab, perferendis et nam consequatur assumenda. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit quo totam vel consequatur sint quis? Ratione, quaerat sapiente voluptatum obcaecati vitae animi, magni magnam quod iusto corrupti nobis omnis? Vitae! Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-				</div>
-				<a href="{{ path('register_customer') }}" class="btn btn-alt">Devenir client dès maintenant</a>
-			</article>
-			<article class="intro-img">
-				<img src="online-shopping-6203699_640" alt="Online shopping woman">
-			</article>
-		</section>
+  <section class="features-section">
+    <h2>Nos solutions bancaires</h2>
+    <div class="features">
+      <div class="feature-card">
+        <img src="instant-transfer.svg" alt="Virements" style="height: 60px; margin-bottom: 1.5rem;">
+        <h3>Virements instantanés</h3>
+        <p>Envoyez de l'argent en temps réel vers n'importe quelle banque en Europe.</p>
+      </div>
+      <div class="feature-card">
+        <img src="savings-goals.svg" alt="Épargne" style="height: 60px; margin-bottom: 1.5rem;">
+        <h3>Objectifs d'épargne</h3>
+        <p>Programmez des versements automatiques et suivez vos projets facilement.</p>
+      </div>
+      <div class="feature-card">
+        <img src="financial-analytics.svg" alt="Analyse" style="height: 60px; margin-bottom: 1.5rem;">
+        <h3>Analyses intelligentes</h3>
+        <p>Visualisez vos dépenses et recevez des recommandations personnalisées.</p>
+      </div>
+    </div>
+  </section>
 
-		<section class="features-section bg-green-300 mt-10">
-			<div class="flex justify-center">
-				<h2 class="text-4xl font-semibold mt-20 mb-20">Pourquoi Choisir notre Banque ?</h2>
-			</div>
-			<div class="features">
-				<div class="feature-card ml-7">
-					<div class="card-inner">
-						<div class="card-front shadow-lg">
-							<img src="{{ asset('images/transfer.svg') }}" alt="Virements" class="h-16 w-16">
-							<h3>Virements rapides</h3>
-						</div>
-						<div class="card-back">
-							<p>Envoyez et recevez de l'argent instantanément.</p>
-						</div>
-					</div>
-				</div>
-				<div class="feature-card">
-					<div class="card-inner">
-						<div class="card-front">
-							<img src="{{ asset('images/savings.svg') }}" alt="Épargne" class="h-16 w-16">
-							<h3>Comptes épargne</h3>
-						</div>
-						<div class="card-back">
-							<p>Boostez vos économies avec nos taux compétitifs.</p>
-						</div>
-					</div>
-				</div>
-				<div class="feature-card">
-					<div class="card-inner">
-						<div class="card-front">
-							<img src="{{ asset('images/support.svg') }}" alt="Support" class="h-16 w-16">
-							<h3>Assistance 24/7</h3>
-						</div>
-						<div class="card-back">
-							<p>Notre équipe est disponible pour vous aider à tout moment.</p>
-						</div>
-					</div>
-				</div>
-				<div class="feature-card mb-40">
-					<div class="card-inner">
-						<div class="card-front">
-							<img src="{{ asset('images/support.svg') }}" alt="Sécurité" class="h-16 w-16">
-							<h3>Sécurité optimale</h3>
-						</div>
-						<div class="card-back">
-							<p>Vos données et transactions sont protégées à 100%.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
+  <section class="testimonials-section">
+    <h2>Ils nous font confiance</h2>
+    <div class="testimonials">
+      <div class="testimonial">
+        <p>"Enfin une banque qui comprend les besoins des indépendants !"</p>
+        <p style="font-weight: 600; margin-top: 1rem;">- Sarah, Consultante digitale</p>
+      </div>
+      <div class="testimonial">
+        <p>"L'interface est si intuitive que j'ai enfin pris le contrôle de mes finances."</p>
+        <p style="font-weight: 600; margin-top: 1rem;">- Marc, Chef de projet</p>
+      </div>
+    </div>
+  </section>
 
-		<section class="accompany-section">
-			<h2>La meilleur banque pour vous
-				<span>accompagner</span>
-				dans vos dépenses et la gestion de votre budget</h2>
-			<article class="accompany-content">
-				<div class="accompany-img">
-					<img src="public/Images/startup-3267505_640" alt="Startup whiteboard room">
-				</div>
-				<div class="accompany-description">
-					<strong>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla fugit earum dolores soluta itaque iste vel minus suscipit consequuntur optio fuga amet unde ab, perferendis et nam consequatur assumenda. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-					</strong>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla fugit earum dolores soluta itaque iste vel minus suscipit consequuntur optio fuga amet unde ab, perferendis et nam consequatur assumenda. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione nulla fugit earum dolores soluta itaque iste vel minus suscipit consequuntur optio fuga amet unde ab, perferendis et nam consequatur assumenda. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-					<a href="{{ path('register_customer') }}" class="btn btn-alt">Devenir client dès maintenant</a>
-				</div>
-			</article>
-		</section>
-
-		<section class="testimonials-section">
-			<h2>Une banque
-				<span>approuvée</span>
-				par ses clients</h2>
-			<div class="testimonials">
-				<div class="testimonial">
-					<p>"Une expérience utilisateur exceptionnelle. Tout est rapide et simple."</p>
-					<span>- Marie Dupont</span>
-				</div>
-				<div class="testimonial">
-					<p>"Je peux enfin gérer mes finances sans stress. Merci pour ce service incroyable !"</p>
-					<span>- Jean Martin</span>
-				</div>
-				<div class="testimonial">
-					<p>"Une expérience utilisateur exceptionnelle. Tout est rapide et simple."</p>
-					<span>- Marie Dupont</span>
-				</div>
-				<div class="testimonial">
-					<p>"Je peux enfin gérer mes finances sans stress. Merci pour ce service incroyable !"</p>
-					<span>- Jean Martin</span>
-				</div>
-			</div>
-		</section>
-
-		<footer class="website-footer">
-			<p>&copy; Hackathon - 2025</p>
-		</footer>
-	</div>
+  <footer>
+    <p>© 2024 Bash & Co - Service bancaire agréé par l'ACPR</p>
+  </footer>
+</div>
 {% endblock %}
