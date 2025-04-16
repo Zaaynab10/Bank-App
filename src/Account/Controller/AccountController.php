@@ -110,6 +110,7 @@ final class AccountController extends AbstractController
     public function accountStats(int $accountId, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
+        
         $account = $entityManager->getRepository(Account::class)->find($accountId);
     
         if (!$account || $account->getOwner() !== $user) {
@@ -117,7 +118,6 @@ final class AccountController extends AbstractController
         }
     
         $transactionRepo = $entityManager->getRepository(Transaction::class);
-    
         $expenses = $transactionRepo->findBy(['source_account' => $account]);
         $incomes = $transactionRepo->findBy(['destination_account' => $account]);
     
@@ -125,6 +125,7 @@ final class AccountController extends AbstractController
     
         foreach (array_merge($expenses, $incomes) as $transaction) {
             $month = $transaction->getDateTime()->format('Y-m');
+    
             if (!isset($stats[$month])) {
                 $stats[$month] = [
                     'income' => 0,
@@ -146,12 +147,24 @@ final class AccountController extends AbstractController
     
         ksort($stats);
     
+        $totalIncome = array_sum(array_column($stats, 'income'));
+        $totalExpense = array_sum(array_column($stats, 'expense'));
+        $totalMonths = count($stats);
+        
+        $avgIncome = $totalMonths > 0 ? $totalIncome / $totalMonths : 0;
+        $avgExpense = $totalMonths > 0 ? $totalExpense / $totalMonths : 0;
+    
         return $this->render('@Account/account_stats.html.twig', [
             'chartData' => json_encode($stats),
-            'accountId' => $accountId,
+            'account' => $account,
+            'avgIncome' => $avgIncome,
+            'avgExpense' => $avgExpense,
+            'currentBalance' => $stats ? end($stats)['balance'] : 0, 
+            'monthlyIncome' => $totalIncome / $totalMonths, 
+            'monthlyExpense' => $totalExpense / $totalMonths, 
+            'savingsRate' => $totalIncome ? round((($totalIncome - $totalExpense) / $totalIncome) * 100, 2) : 0, 
         ]);
     }
-    
     
 
     

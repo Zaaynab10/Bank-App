@@ -3,74 +3,187 @@
 {% block title %}Statistiques du Compte{% endblock %}
 
 {% block main %}
-  <h1>Statistiques du compte ID : {{ accountId }}</h1>
+  <div class="dashboard">
+    <h1 class="title">Analytiques du Compte {{ account.accountNumber }}</h1>
 
-  <h2>Solde mensuel (Balance)</h2>
-  <canvas id="balanceChart"></canvas>
+    <div class="main-stats">
+      <div class="stat-card">
+        <h3>Solde Actuel</h3>
+        <p class="value">€{{ currentBalance|number_format(2, ',', ' ') }}</p>
+      </div>
 
-  <h2>Revenus vs Dépenses par mois</h2>
-  <canvas id="incomeExpenseChart"></canvas>
+      <div class="stat-card">
+        <h3>Revenus Mensuels</h3>
+        <p class="value">€{{ monthlyIncome|number_format(2, ',', ' ') }}</p>
+      </div>
 
+      <div class="stat-card">
+        <h3>Dépenses Mensuelles</h3>
+        <p class="value">€{{ monthlyExpense|number_format(2, ',', ' ') }}</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>Taux d'Épargne</h3>
+        <p class="value">{{ savingsRate }}%</p>
+      </div>
+    </div>
+
+    <div class="charts">
+      <div class="chart-container">
+        <h3>Répartition des Revenus et Dépenses</h3>
+        <canvas id="incomeExpensePieChart"></canvas>
+      </div>
+    </div>
+
+    <div class="user-advice">
+      <p class="advice-message" id="adviceMessage"></p>
+    </div>
+  </div>
+
+  <style>
+    .dashboard {
+      font-family: 'Arial', sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: #f7f7f7;
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #2d3436;
+    }
+
+    .main-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 50px;
+    }
+
+    .stat-card {
+      background-color: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 22%;
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+      border-left: 5px solid #9b2d2d; 
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card h3 {
+      font-size: 1.2rem;
+      color: #636e72;
+      margin-bottom: 15px;
+    }
+
+    .stat-card .value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #9b2d2d; 
+    }
+
+    .charts {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .chart-container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 48%;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 350px !important;
+    }
+
+    .user-advice {
+      margin-top: 50px;
+      padding: 20px;
+      background-color: #fff3e6;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .advice-message {
+      font-size: 1.2rem;
+      color: #d63031;
+      font-weight: bold;
+      margin: 0;
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-      const rawData = {{ chartData|raw }};
+    const rawData = {{ chartData|raw }};
+    const months = Object.keys(rawData);
+    const incomeData = months.map(m => rawData[m].income);
+    const expenseData = months.map(m => rawData[m].expense);
+    const totalIncome = incomeData.reduce((acc, curr) => acc + curr, 0);
+    const totalExpense = expenseData.reduce((acc, curr) => acc + curr, 0);
 
-      const months = Object.keys(rawData);
-      const incomeData = months.map(m => rawData[m].income);
-      const expenseData = months.map(m => rawData[m].expense);
-      const balanceData = months.map(m => rawData[m].balance);
-
-      // Balance chart
-      new Chart(document.getElementById('balanceChart').getContext('2d'), {
-          type: 'bar',
-          data: {
-              labels: months,
-              datasets: [{
-                  label: 'Solde net (EUR)',
-                  data: balanceData,
-                  backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                  borderColor: 'rgba(75, 192, 192, 1)',
-                  borderWidth: 1
-              }]
-          },
-          options: {
-              responsive: true,
-              scales: {
-                  y: {
-                      beginAtZero: true
-                  }
+    // Graphique Circulaire: Revenus vs Dépenses
+    new Chart(document.getElementById('incomeExpensePieChart').getContext('2d'), {
+      type: 'pie',
+      data: {
+        labels: ['Revenus', 'Dépenses'],
+        datasets: [{
+          data: [totalIncome, totalExpense],
+          backgroundColor: ['#00b894', '#e17055'],
+          hoverOffset: 4,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          tooltip: {
+            backgroundColor: '#2d3436',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            callbacks: {
+              label: function(tooltipItem) {
+                let percentage = (tooltipItem.raw / (totalIncome + totalExpense)) * 100;
+                return tooltipItem.label + ': €' + tooltipItem.raw.toFixed(2) + ' (' + percentage.toFixed(2) + '%)';
               }
-          }
-      });
-
-      new Chart(document.getElementById('incomeExpenseChart').getContext('2d'), {
-          type: 'bar',
-          data: {
-              labels: months,
-              datasets: [
-                  {
-                      label: 'Revenus (EUR)',
-                      data: incomeData,
-                      backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                      borderColor: 'rgba(54, 162, 235, 1)',
-                      borderWidth: 1
-                  },
-                  {
-                      label: 'Dépenses (EUR)',
-                      data: expenseData,
-                      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                      borderColor: 'rgba(255, 99, 132, 1)',
-                      borderWidth: 1
-                  }
-              ]
+            }
           },
-          options: {
-              responsive: true,
-              scales: {
-                  y: {
-                      beginAtZero: true
-                  }
-              }
+          legend: {
+            position: 'top',
+            labels: {
+              font: {
+                size: 14
+              },
+              color: '#2d3436'
+            }
           }
-      });
+        }
+      }
+    });
+
+    // Affichage du message  basé sur les dépenses ou le solde
+    window.onload = function() {
+      const adviceMessageElement = document.getElementById('adviceMessage');
+
+      if (totalExpense > totalIncome * 0.9) {
+        adviceMessageElement.textContent = "Alerte : Vos dépenses sont trop élevées par rapport à vos revenus ! Essayez de réduire vos dépenses.";
+      }
+      else if ({{ currentBalance }} < 100) {
+        adviceMessageElement.textContent = "Alerte : Votre solde est faible. Pensez à faire attention à vos dépenses.";
+      } else {
+        adviceMessageElement.textContent = "Vos finances sont sous contrôle. Continuez à suivre vos dépenses et vos économies.";
+      }
+    };
   </script>
 {% endblock %}
