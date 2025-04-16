@@ -51,6 +51,10 @@ final class TransferController extends AbstractController
             $destinationAccountNumber = $form->get('destination_account_number')->getData()->getBankAccountNumber();
             $amount = $form->get('amount')->getData();
 
+            if (!$sourceAccount->canWithdraw($amount)) {
+                throw $this->createAccessDeniedException('Withdrawal denied, insufficient funds or limit exceeded.');
+            }
+        
             if ($sourceAccount === null) {
                 throw $this->createNotFoundException('Source account not found.');
             }

@@ -14,9 +14,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class RegistrationController extends AbstractController
-{
+{   
+
     #[Route('/register/customer', name: 'register_customer')]
-    #[IsGranted('ROLE_CUSTOMER')]
 
     public function registerCustomer(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
     {

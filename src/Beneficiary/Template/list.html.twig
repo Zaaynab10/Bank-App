@@ -1,55 +1,328 @@
 {% extends 'base-client.html.twig' %}
 
-{% block title %}Liste des bénéficiaires
-{% endblock %}
+{% block title %}Liste des bénéficiaires{% endblock %}
 
 {% block main %}
-	<style>
-		h1 {
-			font-size: 32px;
-			margin: 0 0 1vw 1.5vw;
-		}
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-		table {
-			width: 90%;
-			margin: auto;
-		}
+        .beneficiaries-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            animation: fadeIn 0.6s ease-out;
+        }
 
-		th {
-			font-size: 20px;
-			padding: 1vw 0;
-			border: 1px solid black;
-		}
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
 
-		td {
-			text-align: center;
-			font-size: 16px;
-			border: 1px solid black;
-			padding: 1vh 0;
-		}
-	</style>
-	<h1>Mes bénéficiaires</h1>
-	{% if beneficiaries is empty %}
-		<p>Aucun bénéficiaire trouvé.</p>
-	{% else %}
-		<table border="1">
-			<thead>
-				<tr>
-					<th>Nom</th>
-					<th>Numéro de compte</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for beneficiary in beneficiaries %}
-					<tr>
-						<td>{{ beneficiary.name }}</td>
-						<td>{{ beneficiary.bankAccountNumber }}</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-		<a href="{{ path('add_beneficiary') }}" class="inline-block bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-md transition center text-center">
-			Ajouter un bénéficiaire
-		</a>
-	{% endif %}
+        h1 {
+            font-size: 2rem;
+            color: #1a365d;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .add-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg,rgb(200, 9, 9),rgb(54, 9, 9));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(66, 153, 225, 0.2);
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 14px rgba(66, 153, 225, 0.3);
+        }
+
+        .beneficiaries-list {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #4299e1 #f0f4f8;
+        }
+
+        .beneficiaries-list::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .beneficiaries-list::-webkit-scrollbar-track {
+            background: #f0f4f8;
+            border-radius: 10px;
+        }
+
+        .beneficiaries-list::-webkit-scrollbar-thumb {
+            background-color: #4299e1;
+            border-radius: 10px;
+        }
+
+        .beneficiary-card {
+            min-width: 280px;
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-left: 4px solid rgb(141, 16, 16);
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .beneficiary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .beneficiary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(66, 153, 225, 0.1), rgba(56, 178, 172, 0.1));
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .beneficiary-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4299e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .beneficiary-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .account-number {
+            font-family: 'Courier New', monospace;
+            background: #edf2f7;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: #2d3748;
+            margin-bottom: 1.25rem;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .transfer-btn {
+            background: #48bb78;
+            color: white;
+        }
+
+        .transfer-btn:hover {
+            background: #38a169;
+        }
+
+        .details-btn {
+            background: #edf2f7;
+            color: #2d3748;
+        }
+
+        .details-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            color: #cbd5e0;
+            margin-bottom: 1rem;
+        }
+
+        .empty-text {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .beneficiaries-list {
+                gap: 1rem;
+            }
+            
+            .beneficiary-card {
+                min-width: 240px;
+            }
+        }
+    </style>
+
+    <div class="beneficiaries-container">
+        <div class="header">
+            <h1>Mes bénéficiaires</h1>
+            <a href="{{ path('add_beneficiary') }}" class="add-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Ajouter
+            </a>
+        </div>
+
+        {% if beneficiaries is empty %}
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                </div>
+                <p class="empty-text">Vous n'avez aucun bénéficiaire enregistré</p>
+                <a href="{{ path('add_beneficiary') }}" class="add-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Ajouter un bénéficiaire
+                </a>
+            </div>
+        {% else %}
+            <div class="beneficiaries-list">
+                {% for beneficiary in beneficiaries %}
+                    <div class="beneficiary-card">
+                        <div class="card-header">
+                            <div class="avatar">
+                                {{ beneficiary.name|first|upper }}
+                            </div>
+                            <h3 class="beneficiary-name">{{ beneficiary.name }}</h3>
+                        </div>
+                        <div class="account-number">
+                            {{ beneficiary.bankAccountNumber}} 
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn transfer-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="17 1 21 5 17 9"></polyline>
+                                    <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                                    <polyline points="7 23 3 19 7 15"></polyline>
+                                    <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                                </svg>
+                                Transférer
+                            </button>
+                            <button class="action-btn details-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                Détails
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.beneficiary-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.zIndex = 10;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.zIndex = '';
+                });
+            });
+
+            document.querySelectorAll('.transfer-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const card = e.target.closest('.beneficiary-card');
+                    const name = card.querySelector('.beneficiary-name').textContent;
+                    console.log(`Initier transfert vers ${name}`);
+                });
+            });
+
+            document.querySelectorAll('.details-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const card = e.target.closest('.beneficiary-card');
+                    const name = card.querySelector('.beneficiary-name').textContent;
+                    console.log(`Voir détails de ${name}`);
+                });
+            });
+        });
+    </script>
 {% endblock %}

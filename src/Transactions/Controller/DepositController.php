@@ -29,11 +29,13 @@ final class DepositController extends AbstractController {
     $user = $this->getUser();
 
     $bankAccountId = $session->get('bank_account_id');
+    $bankAccount = $accountRepository->find($bankAccountId);
+
     if (!$bankAccountId) {
         throw $this->createAccessDeniedException('No bank account selected in the session.');
     }
-
-    $bankAccount = $accountRepository->find($bankAccountId);
+    
+    
     if (!$bankAccount) {
         throw $this->createAccessDeniedException('Bank account not found.');
     }
@@ -54,10 +56,11 @@ final class DepositController extends AbstractController {
 
     if ($form->isSubmitted() && $form->isValid()) {
         $amount = $form->get('amount')->getData();
-
+      
         if (!$bankAccount->canDeposit($amount)) {
             throw $this->createAccessDeniedException('Deposit denied, the deposit limit is 25,000.');
         }
+       
 
         $transactionService->processTransaction($amount, $bankAccount, $bankAccount, TransactionType::DEPOSIT);
 
