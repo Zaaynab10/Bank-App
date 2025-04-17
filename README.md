@@ -19,6 +19,11 @@ Ce projet a été réalisé dans le cadre de notre formation à l'EFREI (2ᵉ an
 
 ## Fonctionnalités
 
+### Design
+- **Responsive** : Adapté aux mobiles et tablettes.
+- **Visuel moderne** : Utilisation de Bootstrap pour un design épuré et professionnel.
+- **Animation** : Animations fluides pour une expérience utilisateur agréable.
+
 ### Côté Utilisateur
 - Création de comptes bancaires.
 - Dépôt de fonds.
@@ -27,7 +32,6 @@ Ce projet a été réalisé dans le cadre de notre formation à l'EFREI (2ᵉ an
 - Transferts entre comptes.
 - Consultation des transactions pour chaque compte.
 - Suivi de budget visuel et intuitif
-- Interface utilisateur moderne, responsive et conviviale.
 
 ### Côté Administrateur
 - **Gestion des utilisateurs** :
@@ -51,6 +55,8 @@ Ce projet a été réalisé dans le cadre de notre formation à l'EFREI (2ᵉ an
     - Boutons rapides pour effectuer un dépôt, un retrait ou un transfert.
 - **Page des transactions** :
     - Liste des transactions avec détails (montant, date, type).
+- **Page de création de compte** : Formulaire pour créer un nouveau compte bancaire.
+- **Page Bénéficiaire** : Formulaire pour ajouter un bénéficiaire pour les transferts.
 - **Déconnexion** : Redirection vers la page de connexion.
 
 ### Côté administrateur
@@ -65,6 +71,24 @@ Ce projet a été réalisé dans le cadre de notre formation à l'EFREI (2ᵉ an
     - Vue complète des transactions.
     - Option d'annulation pour chaque transaction.
 - **Déconnexion** : Redirection vers la page d'accueil admin.
+
+---
+
+## Sécurité
+
+- **Authentification sécurisée** : Utilisation de l'authentification par mot de passe haché.
+- **Validation des entrées** : Protection contre les injections SQL et XSS.
+- **Gestion des sessions** : Utilisation de sessions sécurisées pour maintenir l'état de connexion.
+- **Contrôles d'accès** : Vérification des autorisations pour chaque action (utilisateur vs administrateur).
+- **Protection CSRF** : Utilisation de jetons CSRF pour sécuriser les formulaires.
+
+## Qualité du code et bonnes pratiques
+
+- **Architecture MVC** : Séparation claire entre le modèle, la vue et le contrôleur.
+- **Utilisation de Composer** : Gestion des dépendances PHP.
+- **ORM Doctrine** : Gestion des entités et des relations avec la base de données.
+- **Architecture modulaire** : Chaque fonctionnalité est encapsulée dans son propre module.
+- **Séparation des préoccupations** : Les fichiers sont organisés par fonctionnalité et type (contrôleurs, modèles, vues).
 
 ---
 
