@@ -1,80 +1,25 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-admin.twig' %}
 
 {% block title %}Admin Dashboard
 {% endblock %}
 
 {% block main %}
-<div class="admin-dashboard">
-  <aside class="sidebar">
-    <video autoplay muted loop class="background-video">
-      <source src="{{ asset('videos/light-side.mp4') }}" type="video/mp4"/>
-    </video>
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Rechercher un utilisateur..."/>
-    </div>
-    <div
-        id="userResults" class="user-results">
-    </div>
-  </aside>
-
-  <main
-      class="main-content">
-    <header class="dashboard-header">
-      <div class="logo">
-        <a href="{{ path('homepage') }}">
-          <img class="bank-logo" src="{{ asset('images/logo-clair.png') }}" alt="Bank Logo">
-        </a>
-      </div>
-      <div class="welcome-section">
-        <h1>Welcome,
-          {{ user.firstName }}
-          {{ user.lastName }}</h1>
-      </div>
-      <div
-          class="admin-info">
-        <img
-            src="{{ asset('images/cat-profile.jpg') }}" alt="Admin Profile Picture" class="admin-photo"
-            id="adminToggle">
-
-        <div class="hidden-nav">
-          <ul>
-            <li class="nav-item">
-              <a href="{{ path('logout') }}">
-                <img src="{{ asset('images/sign-out.svg') }}" alt="Sign Out" class="nav-icon">
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <div class="dark-mode-switch">
-                <img id="themeIcon" src="/images/sun.svg" alt="Theme Icon">
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </header>
-
-    <section class="stats-section">
-      <nav class="stats-nav">
-        <button class="stats-icon" data-target="clients-details">
-          <img src="{{ asset('images/clients.svg') }}" alt="Clients Icon">
-        </button>
-
-
-        <section class="details-container">
-          <div id="clients-details" class="details-content">
-            <h2>Détails des clients</h2>
-            <p>Nombre de clients : {{ totalClients }}</p>
-
-            <p>
-              <a href="{{ path('admin_users_list') }}" class="text-blue-500 hover:text-blue-700">
-                Voir les comptes bancaires des clients
-              </a>
-            </p>
+    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 m-6">
+      {% for user in users %}
+        <div class="user-card bg-white p-4 rounded-lg shadow-lg hover:scale-105 transition-transform">
+          <div class="user-info flex items-center gap-4">
+            <img src="{{ asset('images/user-icon.svg') }}" alt="User Icon" class="user-avatar w-16 h-16 rounded-full bg-gray-200 p-2">
+            <div class="user-details">
+              <h3 class="text-lg font-semibold text-gray-800">{{ user.firstName }} {{ user.lastName }}</h3>
+              <p class="text-sm text-gray-600">{{ user.email }}</p>
+            </div>
           </div>
-        </section>
-      </nav>
+          <a href="{{ path('admin_user_accounts', { id: user.id }) }}" class="view-accounts-btn mt-4 block text-center py-2 px-4 rounded-md bg-[#7B1E3A] hover:bg-[#65152F] text-white font-semibold transition">
+            Voir les comptes
+          </a>
+        </div>
+      {% else %}
+        <p class="col-span-full text-center text-gray-600">Aucun utilisateur trouvé.</p>
+      {% endfor %}
     </section>
-  </main>
-</div>
 {% endblock %}

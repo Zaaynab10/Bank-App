@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize icons to small size and invisible
     navIcons.forEach(icon => {
-        icon.style.transform = 'scale(0)';
-        icon.style.opacity = '0';
+        //icon.style.transform = 'scale(0)';
+        //icon.style.opacity = '0';
         icon.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
     });
 });

@@ -36,12 +36,23 @@ final class AdminController extends AbstractController
         AccountRepository     $bankAccountRepository,
         TransactionRepository $transactionRepository
     ): Response {
-        $user = $this->getUser(); 
+        $user = $this->getUser();
 
+        $users = $userRepository->findAll();
         $totalClients = $userRepository->count([]);
         $totalAccounts = $bankAccountRepository->count([]);
         $totalTransactions = $transactionRepository->count([]);
         $totalTransactionAmount = $transactionRepository->getTotalTransactionAmount();
+
+        $userData = [];
+        foreach ($users as $user) {
+            $userData[] = [
+                'id' => $user->getId(),
+                'firstName' => $user->getFirstName(),
+                'lastName' => $user->getLastName(),
+                'email' => $user->getEmail(),
+            ];
+        }
         $recentUsers = $userRepository->findBy([], ['id' => 'DESC'], 5);
 
         foreach ($recentUsers as $userObj) {
@@ -55,6 +66,7 @@ final class AdminController extends AbstractController
             'totalAccounts' => $totalAccounts,
             'totalTransactions' => $totalTransactions,
             'totalTransactionAmount' => $totalTransactionAmount,
+            'users' => $userData,
             'recentUsers' => $recentUsers,
         ]);
     }
@@ -160,8 +172,9 @@ final class AdminController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function showAccountTransactions(int $accountId): Response {
         $transactions = $this->accountService->getAccountTransactions($accountId);
-
+        $user = $this->getUser();
         return $this->render('@Admin/transactions.html.twig', [
+            'user' => $user,
             'transactions' => $transactions,
             'accountId' => $accountId,
         ]);
