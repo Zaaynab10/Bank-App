@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Beneficiary\Controller;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use App\Account\Repository\AccountRepository;
 use App\Beneficiary\Entity\Beneficiary;
@@ -14,6 +15,8 @@ use Symfony\Component\Routing\Annotation\Route;
 final class BeneficiaryController extends AbstractController
 {
     #[Route('/add', name: 'add_beneficiary')]
+    #[IsGranted('ROLE_CUSTOMER')]
+
     public function addBeneficiary(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -57,6 +60,8 @@ final class BeneficiaryController extends AbstractController
     }
 
     #[Route('/list', name: 'list_beneficiaries')]
+    #[IsGranted('ROLE_CUSTOMER')]
+
     public function listBeneficiaries(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();

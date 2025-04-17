@@ -125,15 +125,17 @@ private function hasValidCurrentAccount(array $bankAccounts): bool
 
     #[Route('/{accountId}', name: 'account')]
     #[IsGranted('ROLE_CUSTOMER')]
-    public function showAccountTransactions(int $accountId ,  SessionInterface $session): Response
+    public function showAccountTransactions(int $accountId ,  EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $transactions = $this->accountService->getAccountTransactions($accountId);
 
         $session->set('bank_account_id', $accountId);
-     
+        $account = $entityManager->getRepository(Account::class)->find($accountId);
+
         return $this->render('@Account/account.html.twig', [
             'transactions' => $transactions,
             'accountId' => $accountId,
+            'account'=>$account,
         ]);
     }
 

@@ -5,22 +5,30 @@
 {% block main %}
   <div class="bg-gradient-to-r from-red-700 to-red-800 rounded-2xl p-6 mb-8 backdrop-blur-lg shadow-xl">
     <div class="flex flex-wrap justify-center gap-4">
-      <a href="{{ path('withdraw') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
-        <span>Retrait</span>
-      </a>
-      <a href="{{ path('deposit') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-        <span>Dépôt</span>
-      </a>
-      <a href="{{ path('transfer') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-        <span>Virement</span>
-      </a>
-      <a href="{{ path('account_stats', { accountId: accountId }) }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-        <span>Analytiques</span>
-      </a>
+      {% if account.type.value == 'current' %}
+
+        <a href="{{ path('withdraw') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+          <span>Retrait</span>
+        </a>
+        <a href="{{ path('deposit') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          <span>Dépôt</span>
+        </a>
+        <a href="{{ path('transfer') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          <span>Virement</span>
+        </a>
+        <a href="{{ path('account_stats', { accountId: accountId }) }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          <span>Analytiques</span>
+        </a>
+      {% else %}
+        <a href="{{ path('transfer') }}" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-white transition-all duration-300 transform hover:scale-105">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+          <span>Virement</span>
+        </a>
+      {% endif %}
     </div>
   </div>
 
@@ -126,5 +134,4 @@
 
     loadTransactions();  
   </script>
-
 {% endblock %}

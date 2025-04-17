@@ -42,13 +42,20 @@ final class AdminController extends AbstractController
         $totalAccounts = $bankAccountRepository->count([]);
         $totalTransactions = $transactionRepository->count([]);
         $totalTransactionAmount = $transactionRepository->getTotalTransactionAmount();
+        $recentUsers = $userRepository->findBy([], ['id' => 'DESC'], 5);
 
+        foreach ($recentUsers as $userObj) {
+            $accounts = $bankAccountRepository->findBy(['owner' => $userObj]);
+            $userObj->accounts = $accounts; 
+        }
+    
         return $this->render('@Admin/index.html.twig', [
             'user' => $user,
             'totalClients' => $totalClients,
             'totalAccounts' => $totalAccounts,
             'totalTransactions' => $totalTransactions,
             'totalTransactionAmount' => $totalTransactionAmount,
+            'recentUsers' => $recentUsers,
         ]);
     }
 
