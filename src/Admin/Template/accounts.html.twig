@@ -77,6 +77,10 @@
                     {% if account.status.value == 'active' %} Désactiver {% else %} Activer {% endif %}
                   </button>
                 </form>
+                <a href="{{ path('admin_delete_account', { accountId: account.id }) }}"
+                   class="bg-[#7B1E3A] hover:bg-[#65152F] text-white font-bold py-2 px-3 rounded-md shadow-md transition">
+                  Supprimer le compte
+                </a>
               </div>
             </li>
           {% endif %}
@@ -113,6 +117,10 @@
                     {% if account.status.value == 'active' %} Désactiver {% else %} Activer {% endif %}
                   </button>
                 </form>
+                <a href="{{ path('admin_delete_account', { accountId: account.id }) }}"
+                class="bg-[#7B1E3A] hover:bg-[#65152F] text-white font-bold py-2 px-3 rounded-md shadow-md transition">
+                Supprimer le compte
+                </a>
               </div>
             </li>
           {% endif %}

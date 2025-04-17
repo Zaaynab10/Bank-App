@@ -204,4 +204,24 @@ final class AdminController extends AbstractController
             'id' => $account->getOwner()->getId(),
         ]);
     }
+
+    #[Route('/accounts/{accountId}/delete', name: 'admin_delete_account')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deleteAccount(int $accountId,
+                                  AccountRepository $accountRepository,
+                                  EntityManagerInterface $entityManager): Response {
+
+        $account = $accountRepository->find($accountId);
+
+        if (!$account) {
+            throw $this->createNotFoundException("Bank account not found.");
+        }
+
+        $entityManager->remove($account);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_user_accounts', [
+            'id' => $account->getOwner()->getId(),
+        ]);
+    }
 }

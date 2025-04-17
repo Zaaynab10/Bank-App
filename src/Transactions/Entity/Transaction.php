@@ -30,11 +30,11 @@ class Transaction
     private ?\DateTimeInterface $date_time = null;
 
     #[ORM\ManyToOne(targetEntity: Account::class, inversedBy: 'transactions_issued')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Account $source_account = null;
 
     #[ORM\ManyToOne(targetEntity: Account::class, inversedBy: 'transactions_received')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Account $destination_account = null;
 
     public function getId(): ?int
