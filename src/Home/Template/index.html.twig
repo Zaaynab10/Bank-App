@@ -121,43 +121,62 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
     
-    .features-section {
-      background: white;
-      padding: 6rem 5%;
-    }
-    
-    .features-section h2 {
-      text-align: center;
-      font-size: 2rem;
-      color: var(--primary-color);
-      margin-bottom: 4rem;
-    }
-    
     .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-    
-    .feature-card {
-      background: #fff;
-      border-radius: 15px;
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      transition: transform 0.3s ease;
-      text-align: center;
-    }
-    
-    .feature-card:hover {
-      transform: translateY(-10px);
-    }
-    
-    .feature-card img {
-      max-height: 60px;
-      margin-bottom: 1.5rem;
-      filter: drop-shadow(0 5px 5px rgba(139, 28, 43, 0.2));
-    }
-    
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  perspective: 1000px; /* Nécessaire pour le flip */
+}
+
+.feature-card {
+  background: transparent;
+  border-radius: 15px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.feature-inner {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.feature-card:hover .feature-inner {
+  transform: rotateY(180deg);
+}
+
+.feature-front, .feature-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.feature-front img {
+  max-height: 60px;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 5px 5px rgba(139, 28, 43, 0.2));
+}
+
+.feature-back {
+  transform: rotateY(180deg);
+  background: var(--primary-color);
+  color: white;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
     .testimonials-section {
       background: var(--light-bg);
       padding: 6rem 5%;
@@ -233,25 +252,51 @@
     </article>
   </section>
 
-  <section class="features-section">
-    <h2>Nos solutions bancaires</h2>
-    <div class="features">
-      <div class="feature-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/10347/10347709.png" alt="Virements">
-        <h3>Virements instantanés</h3>
-        <p>Envoyez de l'argent en temps réel vers n'importe quelle banque en Europe.</p>
-      </div>
-     <div class="feature-card">
-<img src="https://cdn-icons-png.flaticon.com/512/3132/3132699.png" alt="Épargne" style="height:60px;margin-bottom:1.5rem;">  <h3>Objectifs d'épargne</h3>
-  <p>Programmez des versements automatiques et suivez vos projets facilement.</p>
-</div>
-      <div class="feature-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/10347/10347725.png" alt="Analyse">
-        <h3>Analyses intelligentes</h3>
-        <p>Visualisez vos dépenses et recevez des recommandations personnalisées.</p>
+<section class="features-section">
+  <h2>Nos solutions bancaires</h2>
+  <div class="features">
+    
+    <div class="feature-card">
+      <div class="feature-inner">
+        <div class="feature-front">
+          <img src="https://cdn-icons-png.flaticon.com/512/10347/10347709.png" alt="Virements">
+          <h3>Virements instantanés</h3>
+          <p>Envoyez de l'argent en temps réel vers n'importe quelle banque en Europe.</p>
+        </div>
+        <div class="feature-back">
+          <p>💸 Simple, rapide, sécurisé : vos transferts n'ont jamais été aussi efficaces.</p>
+        </div>
       </div>
     </div>
-  </section>
+
+    <div class="feature-card">
+      <div class="feature-inner">
+        <div class="feature-front">
+          <img src="https://cdn-icons-png.flaticon.com/512/3132/3132699.png" alt="Épargne" style="height:60px;margin-bottom:1.5rem;">
+          <h3>Objectifs d'épargne</h3>
+          <p>Programmez des versements automatiques et suivez vos projets facilement.</p>
+        </div>
+        <div class="feature-back">
+          <p>📈 Gardez le cap sur vos projets personnels avec un suivi motivant.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-inner">
+        <div class="feature-front">
+          <img src="https://cdn-icons-png.flaticon.com/512/10347/10347725.png" alt="Analyse">
+          <h3>Analyses intelligentes</h3>
+          <p>Visualisez vos dépenses et recevez des recommandations personnalisées.</p>
+        </div>
+        <div class="feature-back">
+          <p>📊 Comprenez vos habitudes et optimisez votre budget facilement.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
   <section class="testimonials-section">
     <h2>Ils nous font confiance</h2>
