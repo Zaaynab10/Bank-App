@@ -48,7 +48,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register/admin', name: 'register_admin')]
-    #[IsGranted('ROLE_ADMIN')]
+    //#[IsGranted('ROLE_ADMIN')]
     public function registerAdmin(
         Request $request, 
         UserPasswordHasherInterface $userPasswordHasher, 
