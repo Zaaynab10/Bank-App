@@ -113,7 +113,7 @@ Ce projet a été réalisé dans le cadre de notre formation à l'EFREI (2ᵉ an
 ### Étapes d'installation
 1. **Clonez le projet** :
    ```bash
-   git clone https://github.com/Elioott/Bank-Management
+   git clone https://github.com/Zaaynab10/Bank-App.git
    ```
 
 2. **Naviguez dans le dossier du projet** :
