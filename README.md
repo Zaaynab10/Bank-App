@@ -9,13 +9,6 @@ Ce projet a été réalisé dans le cadre de notre formation à l'EFREI (2ᵉ an
 
 ---
 
-## Équipe de développement
-- **Eliott CRESSIAUX**
-- **Adam BRUT**
-- **Ndeye Seynabou DIAW**
-- **Amâra-Noah GAKOU**
-
----
 
 ## Fonctionnalités
 
